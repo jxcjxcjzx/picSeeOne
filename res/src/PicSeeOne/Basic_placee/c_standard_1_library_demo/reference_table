@@ -1,0 +1,10 @@
+<ctype.h>  -----   dealing with charsets
+<stdio.h>  -----   input/output
+<stdlib.h> -----   some complicated tools
+<string.h> -----   text handling
+
+<assert.h> -----   for programs protection
+<limits.h> -----   system parameters for integer computing
+<stddef.h> -----   common types and constants
+<time.h>   -----   time about
+

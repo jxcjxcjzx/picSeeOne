@@ -1,0 +1,4 @@
+ this first library is for qualified c programmers.
+ c is a very simple language, in the inpendent environment,
+ people only have to offer implements to meet with the changes in
+ <float.h>, <limits.h>, <stdarg.h>, <stddef.h> files. 

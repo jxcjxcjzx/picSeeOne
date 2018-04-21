@@ -1,0 +1,641 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>AJAX技术初探 - weihj1999的专栏
+        - 博客频道 - CSDN.NET</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Ajax 能够做什么？&#160;&#160;&#160;&#160;&#160;&#160;&#160; 如今 Google Suggest 和 Google Maps 使用了 Ajax，通过  Ajax，我们可以使得客户端得到丰富的应用体验及交换操作，而用户不会感觉到有网页提交或刷新的过程，页面也不需要被重新加载，应用的数据交换都被隐藏。&#160;&#160;&#160;&#160;&#160;&#160; 传统的  WEB 应用程序模型是这样工作的：用户的界面操作触发 HTTP 请求，服务器在接收到请求之后进行一" />
+    <script src="http://static.blog.csdn.net/scripts/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://static.blog.csdn.net/scripts/ad.js?v=1.1"></script>
+    <link rel="Stylesheet" type="text/css" href="http://static.blog.csdn.net/skin/default/css/style.css?v=1.1" />
+    <link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="/weihj1999/rss/list" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link type="text/css" rel="stylesheet" href="http://static.blog.csdn.net/scripts/SyntaxHighlighter/styles/default.css" />
+
+</head>
+<body>
+    <script src="http://csdnimg.cn/pubnav/js/pub_topnav_2011.js" type="text/javascript"></script>
+    <div id="container">
+        <div id="header">
+    <div class="header">
+        <div id="blog_title">
+            <h1>
+                <a href="http://blog.csdn.net/weihj1999">weihj1999的专栏</a></h1>
+            <h2>软件设计开发测试 生活工作学习教育</h2>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</div>
+<div id="navigator">
+    <div class="navigator_bg">
+    </div>
+    <div class="navigator">
+        <ul>
+                <li id="btnContents"><a href="http://blog.csdn.net/weihj1999?viewmode=contents"><span>
+                    <img src="http://static.blog.csdn.net/images/ico_list.gif">目录视图</span></a></li>
+                <li id="btnView"><a href="http://blog.csdn.net/weihj1999?viewmode=list"><span>
+                    <img src="http://static.blog.csdn.net/images/ico_summary.gif">摘要视图</span></a></li>
+                <li id="btnRss"><a href="http://blog.csdn.net/weihj1999/rss/list"><span>
+                    <img src="http://static.blog.csdn.net/images/ico_rss.gif">订阅</span></a></li>
+</ul>
+    </div>
+</div>
+<script type="text/javascript">
+    var username = "weihj1999";
+    var _blogger = username;
+    var blog_address = "http://blog.csdn.net/weihj1999";
+    var static_host = "http://static.blog.csdn.net";
+    var currentUserName = "";
+</script>
+
+        <div id="body">
+            <div id="main">
+                <div class="main">
+<div class="notice tracking-ad" data-mod='popu_3' > 
+
+<a href="http://vote.blog.csdn.net/blogstar2013"target="_blank">
+<font color=blue>投票赢好礼，周周有惊喜！
+ </font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://blog.csdn.net/blogdevteam/article/details/17440147" target="_blank"><font color=red>2014年4月微软MVP申请开始了！
+</font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://blog.csdn.net/csdn_ask/article/details/16943685"target="_blank">
+<font color=blue>消灭0回答，赢下载分
+ </font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+<a href="http://blog.csdn.net/blogdevteam/article/details/17356319"target="_blank">
+<font color=red>“我的2013”年度征文活动火爆进行中！
+ </font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://www.csdn.net/article/2013-12-17/2817828"target="_blank">
+<font color=red>专访Kinect手语翻译系统团队
+ </font></a>
+
+
+</div>                    <link href="http://static.blog.csdn.net/css/comment1.css" type="text/css" rel="stylesheet" />
+<link href="http://static.blog.csdn.net/css/style1.css" type="text/css" rel="stylesheet" />
+<div id="article_details" class="details">
+    <div class="article_title">
+    <span class="ico ico_type_Original"></span>
+    <h3>
+        <span class="link_title"><a href="/weihj1999/article/details/1370794">
+        AJAX技术初探
+        </a></span>
+    </h3>
+</div>
+
+    <div class="article_manage">
+        <span class="link_categories">
+        分类：
+            <a href="/weihj1999/article/category/252624">AJAX</a> 
+        </span>
+    <span class="link_postdate">2006-11-07 10:09</span>
+    <span class="link_view" title="阅读次数">2097人阅读</span>
+    <span class="link_comments" title="评论次数"><a href="#comments">评论</a>(0)</span>
+    <span class="link_collect"><a href="javascript:void(0);" onclick="javascript:collectArticle('AJAX技术初探','1370794');return false;" title="收藏">收藏</a></span>
+    <span class="link_report"><a href="#report"  onclick="javascript:report(1370794,2);return false;" title="举报">举报</a></span>
+    
+</div>
+<div class="tag2box"><a href='http://www.csdn.net/tag/ajax' target=_blank>ajax</a><a href='http://www.csdn.net/tag/xmlhttprequest' target=_blank>xmlhttprequest</a><a href='http://www.csdn.net/tag/%e6%9c%8d%e5%8a%a1%e5%99%a8' target=_blank>服务器</a><a href='http://www.csdn.net/tag/javascript' target=_blank>javascript</a><a href='http://www.csdn.net/tag/mozilla' target=_blank>mozilla</a><a href='http://www.csdn.net/tag/xml' target=_blank>xml</a></div>
+
+    
+<div id="article_content" class="article_content">
+<p class="style10" style="text-align: left; font-weight: bold;">Ajax 能够做什么？</p>
+<p class="style10" style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 如今 Google Suggest 和 Google Maps 使用了 Ajax，通过  Ajax，我们可以使得客户端得到丰富的应用体验及交换操作，而用户不会感觉到有网页提交或刷新的过程，页面也不需要被重新加载，应用的数据交换都被隐藏。<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-weight: bold;">传统的</span>  WEB 应用程序模型是这样工作的：用户的界面操作触发 HTTP 请求，服务器在接收到请求之后进行一些业务逻辑处理，如保存数据等，然后向客户端返回一个 HTML  页面。但这种方式并没有给予用户很好的应用体验，当服务器在处理数据的时候，用户则处于等待的状态，每一步操作都需要等待，太多的等待会使用户越来越没有耐心。而  Ajax 则大不相同，它通过 Ajax 引擎，使得应用过程很自然，操作很流畅，因为其只和服务器交换有用的数据，而页面显示等不必要的数据则不再重新加载。<span style="font-weight: bold;">Ajax  引擎</span>其实就是 JavaScript、XML、XMLHttpRequest 等等各项技术的综合应用。</p>
+<span style="font-weight: bold;">&nbsp;为什么使用AJAX?</span><br style="font-weight: bold;" />
+<div>　　1、通过适当的Ajax应用达到更好的用户体验；<br />　　2、把以前的一些服务器负担的工作<span style="font-weight: bold;">转嫁</span>到客户端，利于客户端闲置的处理能力来处理，减轻服务器和带宽的负担，从而达到节约ISP的空间及带宽租用成本的目的。<br /><br /><span style="font-weight: bold;">AJAX从哪里来的?</span><br style="font-weight: bold;" />　　Ajax这个概念的最早提出者Jesse James Garrett认为：<br />　　Ajax是<span style="font-weight: bold;">Asynchronous JavaScript and  XML</span>的缩写。<br />　　Ajax并不是一门新的语言或技术,它实际上是几项技术按一定的方式组合在一在同共的协作中发挥各自的作用,它包括：<br />　　&middot;使用XHTML和CSS标准化呈现;<br />　　&middot;使用DOM实现动态显示和交互;<br />　　&middot;使用XML和XSLT进行数据交换与处理;<br />　　&middot;使用XMLHttpRequest进行异步数据读取;<br />　　&middot;最后用JavaScript绑定和处理所有数据;<br />
+<div style="text-align: left;">　　Ajax的<span style="font-weight: bold;">工作原理</span>相当于在用户和服务器之间加了&mdash;个<span style="font-weight: bold;">中间层</span>,使用户操作与服务器响应<span style="font-weight: bold;">异步化</span>。并不是所有的用户请求都提交给服务器,像&mdash;些数据验证和数据处理等都交给Ajax引擎自己来做,只有确定需要从服务器读取新数据时再由Ajax引擎代为向服务器提交请求。<br /></div>
+<div style="text-align: center;"><img src="http://p.blog.csdn.net/images/p_blog_csdn_net/weihj1999/252627/o_200581060929.png" alt="" /><br />
+<div style="text-align: left;"><br /><span style="font-weight: bold;">AJAX的核心技术有哪些？</span><br />　　虽然Garrent列出了7条Ajax的构成技术，但个人认为，所谓的Ajax其<span style="font-weight: bold;">核心</span>只有JavaScript、XMLHTTPRequest和DOM，如果所用数据格式为XML的话，还可以再加上XML这一项(Ajax从服务器端返回的数据可以是XML格式，也可以是文本等其他格式)。<br />　　在旧的交互方式中,由用户触发一个HTTP请求到服务器,服务器对其进行处理后再返回一个新的HTHL页到客户端,每当服务器处理客户端提交的请求时,客户都只能空闲等待,并且哪怕只是一次很小的交互、只需从服务器端得到很简单的一个数据,都要返回一个完整的HTML页,而用户每次都要浪费时间和带宽去重新读取整个页面。<br /><br />　　而使用Ajax后用户从感觉上几乎所有的操作都会很快响应没有页面重载（白屏）的等待。<br />　　1、XMLHTTPRequest<br />　　Ajax的一个最大的特点是<span style="font-weight: bold;">无需刷新</span>页面便可向服务器传输或读写数据(又称无刷新更新页面),这一特点主要得益于<span style="font-weight: bold;">XMLHTTP组件XMLHTTPRequest对象</span>。这样就可以向再发桌面应用程序只同服务器进行数据层面的交换,而不用每次都刷新界面也不用每次将数据处理的工作提交给服务器来做,这样即减轻了服务器的负担又加快了响应速度、缩短了用户等候时间。<br />　　最早应用XMLHTTP的是微软,IE（IE5以上）通过允许开发人员在Web页面内部使用XMLHTTP  ActiveX组件扩展自身的功能,开发人员可以不用从当前的Web页面导航而直接传输数据到服务器上或者从服务器取数据。这个功能是很重要的,因为它帮助减少了无状态连接的痛苦,它还可以排除下载冗余HTML的需要,从而提高进程的速度。Mozilla（Mozilla1.0以上及NetScape7以上）做出的回应是创建它自己的继承XML代理类：XMLHttpRequest类。Konqueror  (和Safari  v1.2,同样也是基于KHTML的浏览器)也支持XMLHttpRequest对象,而Opera也将在其v7.6x+以后的版本中支持XMLHttpRequest对象。对于大多数情况，XMLHttpRequest对象和XMLHTTP组件很相似,方法和属性也类似,只是有一小部分属性不支持。<br />　　XMLHttpRequest的应用：<br />
+<div>　　&middot;XMLHttpRequest对象在JS中的应用<br />
+<p class="code">var xmlhttp = new  XMLHttpRequest();</p>
+&middot;微软的XMLHTTP组件在JS中的应用<br />
+<p class="code">var xmlhttp = new ActiveXObject(Microsoft.XMLHTTP);<br />var xmlhttp  = new ActiveXObject(Msxml2.XMLHTTP);</p>
+XMLHttpRequest 对象方法<br />
+<p class="code">/**<br />* Cross-browser XMLHttpRequest  instantiation.<br />*/<br /><br />if (typeof XMLHttpRequest == &rsquo;undefined&rsquo;)  {<br />　XMLHttpRequest = function () {<br />　　var msxmls = [&rsquo;MSXML3&rsquo;, &rsquo;MSXML2&rsquo;,  &rsquo;Microsoft&rsquo;]<br />　　for (var i=0; i &lt; msxmls.length; i++) {<br />　　　try  {<br />　　　　return new ActiveXObject(msxmls[i]+&rsquo;.XMLHTTP&rsquo;)<br />　　　} catch (e) {  }<br />　　}<br />　　throw new Error(&quot;No XML component  installed!&quot;)<br />　}<br />}<br />function createXMLHttpRequest() {<br />　try {<br />　　//  Attempt to create it &quot;the Mozilla way&quot; <br />　　if (window.XMLHttpRequest)  {<br />　　　return new XMLHttpRequest();<br />　　}<br />　　// Guess not - now the IE  way<br />　　if (window.ActiveXObject) {<br />　　　return new  ActiveXObject(getXMLPrefix() + &quot;.XmlHttp&quot;);<br />　　}<br />　}<br />　catch (ex)  {}<br />　return false;<br />};<br /></p>
+XMLHttpRequest 对象方法 <br /><br />
+<table width="80%" cellspacing="1" bgcolor="#00ffff" align="center" class="tdAjax">
+    <tbody>
+        <tr>
+            <td><font size="2">方法</font></td>
+            <td><font size="2">描述</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">abort()</font></td>
+            <td><font size="2">停止当前请求</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">getAllResponseHeaders()</font></td>
+            <td><font size="2">作为字符串返问完整的headers</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">getResponseHeader(&quot;headerLabel&quot;)</font></td>
+            <td><font size="2">作为字符串返问单个的header标签</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">open(&quot;method&quot;,&quot;URL&quot;[,asyncFlag[,&quot;userName&quot;[,  &quot;password&quot;]]])</font></td>
+            <td><font size="2">设置未决的请求的目标 URL, 方法, 和其他参数</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">send(content)</font></td>
+            <td><font size="2">发送请求</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">setRequestHeader(&quot;label&quot;, &quot;value&quot;)</font></td>
+            <td><font size="2">设置header并和请求一起发送</font></td>
+        </tr>
+    </tbody>
+</table>
+<br />　　XMLHttpRequest  对象属性 <br /><br />
+<table width="80%" cellspacing="1" bgcolor="#00ffff" align="center" class="tdAjax">
+    <tbody>
+        <tr>
+            <td><font size="2">属性</font></td>
+            <td><font size="2">描述</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">onreadystatechange</font></td>
+            <td><font size="2">状态改变的事件触发器</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">readyState</font></td>
+            <td><font size="2">对象状态(integer):<br />0 = 未初始化<br />1 = 读取中<br />2 = 已读取<br />3 =  交互中<br />4 = 完成</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">responseText</font></td>
+            <td><font size="2">服务器进程返回数据的文本版本</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">responseXML</font></td>
+            <td><font size="2">服务器进程返回数据的兼容DOM的XML文档对象</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">status</font></td>
+            <td><font size="2">服务器返回的状态码, 如：404 = &quot;文件末找到&quot; 、200 =&quot;成功&quot;</font></td>
+        </tr>
+        <tr>
+            <td><font size="2">statusText</font></td>
+            <td><font size="2">服务器返回的状态文本信息</font></td>
+        </tr>
+    </tbody>
+</table>
+<br />　　2、JavaScript<br />　　JavaScript是一在浏览器中大量使用的编程语言，，他以前一直被贬低为一门糟糕的语言（他确实在使用上比较枯燥），以在常被用来作一些用来炫耀的小玩意和恶作剧或是单调琐碎的表单验证。但事实是，他是一门真正的编程语言，有着自已的标准并在各种浏览器中被广泛支持。<br />　　3、DOM<br />　　Document  Object Model。<br />　　DOM是给 HTML 和 XML 文件使用的一组  API。它<span style="font-weight: bold;">提供了文件的结构表述</span>，让你可以改变其中的內容及可见物。其本质是建立网页与 Script  或程序语言沟通的桥梁。<br />　　所有WEB开发人员可操作及建立文件的属性、方法及事件都以对象来展现（例如，document  就代表&ldquo;文件本身&ldquo;这个对像，table 对象则代表 HTML 的表格对象等等）。这些对象可以由当今大多数的浏览器以 Script  来取用。<br />　　一个用HTML或XHTML构建的网页也可以看作是一组结构化的数据，这些数据被封在DOM（Document Object  Model）中，DOM提供了网页中各个对象的读写的支持。<br />　　4、XML<br />　　可扩展的标记语言（Extensible Markup  Language）具有一种开放的、可扩展的、可自描述的语言结构，它已经成为网上数据和文档传输的标准。它是用来描述数据结构的一种语言，就正如他的名字一样。他使对某些结构化数据的定义更加容易，并且可以通过他和其他应用程序交换数据。<br />　　5、综合<br />　　Jesse  James  Garrett提到的Ajax引擎，实际上是一个比较复杂的JavaScript应用程序，用来处理用户请求，读写服务器和更改DOM内容。<br />　　JavaScript的Ajax引擎读取信息，并且互动地重写DOM，这使网页能无缝化重构，也就是在页面已经下载完毕后改变页面内容，这是我们一直在通过JavaScript和DOM在广泛使用的方法，但要使网页真正动态起来，不仅要内部的互动，还需要从外部获取数据，在以前，我们是让用户来输入数据并通过DOM来改变网页内容的，但现在，XMLHTTPRequest，可以让我们在不重载页面的情况下读写服务器上的数据，使用户的输入达到最少。<br />　　基于XML的网络通讯也并不是新事物，实际上FLASH和JAVA  Applet都有不错的表现，现在这种富交互在网页上也可用了，基于标准化的并被广泛支持和技术，并且不需要插件或下载小程序。<br />　　Ajax是传统WEB应用程序的一个转变。以前是服务器每次生成HTML页面并返回给客户端（浏览器）。在大多数网站中，很多页面中至少90%都是一样的，比如：结构、格式、页头、页尾、广告等，所不同的只是一小部分的内容，但每次服务器都会生成所有的页面再返回给客户端，这无形之中是一种浪费，不管是对于用户的时间、带宽、CPU耗用，还是对于ISP的高价租用的带宽和空间来说。如果按一页来算，只能几K或是几十K可能并不起眼，但像SINA每天要生成几百万个页面的大ISP来说，可以说是损失巨大的。而AJAX可以所为客户端和服务器的中间层，来处理客户端的请求，并根据需要向服务器端发送请求，用什么就取什么、用多少就取多少，就不会有数据的冗余和浪费，减少了数据下载总量，而且更新页面时不用重载全部内容，只更新需要更新的那部分即可，相对于纯后台处理并重载的方式缩短了用户等待时间，也把对资源的浪费降到最低，基于标准化的并被广泛支持和技术，并且不需要插件或下载小程序，所以Ajax对于用户和ISP来说是双盈的。<br /><br />　　Ajax使WEB中的界面与应用分离（也可以说是数据与呈现分离），而在以前两者是没有清晰的界限的，数据与呈现分离的分离，有利于分工合作、减少非技术人员对页面的修改造成的WEB应用程序错误、提高效率、也更加适用于现在的发布系统。也可以把以前的一些服务器负担的工作转嫁到客户端，利于客户端闲置的处理能力来处理。<br /></div>
+</div>
+</div>
+</div>
+<span style="font-weight: bold;">AJAX有哪些主要应用呢？</span><br />　　Ajax理念的出现，揭开了无刷新更新页面时代的序幕，并有代替传统web开发中采用form(表单)递交方式更新web页面的趋势，可以算是一个里程碑。但Ajax都不是适用于所有地方的，它的适用范围是由它的特性所决定的。<br /><br />　　举个应用的例子，是关于级联菜单方面的Ajax应用。<br /><br />　　我们以前的对级联菜单的处理是这样的：<br /><br />　　为了避免每次对菜单的操作引起的重载页面，不采用每次调用后台的方式，而是一次性将级联菜单的所有数据全部读取出来并写入数组，然后根据用户的操作用JavaScript来控制它的子集项目的呈现，这样虽然解决了操作响应速度、不重载页面以及避免向服务器频繁发送请求的问题，但是如果用户不对菜单进行操作或只对菜单中的一部分进行操作的话，那读取的数据中的一部分就会成为冗余数据而浪费用户的资源，特别是在菜单结构复杂、数据量大的情况下（比如菜单有很多级、每一级菜又有上百个项目），这种弊端就更为突出。<br /><br />　　如果在此案中应用Ajax后，结果就会有所改观：<br /><br />　　在初始化页面时我们只读出它的第一级的所有数据并显示，在用户操作一级菜单其中一项时，会通过Ajax向后台请求当前一级项目所属的二级子菜单的所有数据，如果再继续请求已经呈现的二级菜单中的一项时，再向后面请求所操作二级菜单项对应的所有三级菜单的所有数据，以此类推&hellip;&hellip;这样，用什么就取什么、用多少就取多少，就不会有数据的冗余和浪费，减少了数据下载总量，而且更新页面时不用重载全部内容，只更新需要更新的那部分即可，相对于后台处理并重载的方式缩短了用户等待时间，也把对资源的浪费降到最低。<br /><br />　　此外，Ajax由于可以调用外部数据，也可以实现数据聚合的功能（当然要有相应授权），比如微软刚刚在3月15日发布的在线RSS阅读器BETA版；还可以利于一些开放的数据，开发自已的一些应用程序，比如用Amazon的数据作的一些新颖的图书搜索应用。<br /><br /><span style="font-weight: bold;">AJAX的优势</span><br />　　1、减轻服务器的负担。因为Ajax的根本理念是&ldquo;<span style="font-weight: bold;">按需取数据</span>&rdquo;，所以最大可能在减少了冗余请求和响影对服务器造成的负担；<br />　　2、无刷新更新页面，减少用户实际和心理等待时间；<br /><br />
+<div>　　首先，&ldquo;按需取数据&rdquo;的模式减少了数据的实际读取量，打个很形象的比方，如果说重载的方式是从一个终点回到原点再到另一个终点的话，那么Ajax就是以一个终点为基点到达另一个终点；<br /></div>
+<div>　　其次，即使要读取比较大的数据，也不用像RELOAD一样出现白屏的情况，由于Ajax是用XMLHTTP发送请求得到服务端应答数据，在不重新载入整个页面的情况下用Javascript操作DOM最终更新页面的，所以在读取数据的过程中，用户所面对的也不是白屏，而是原来的页面状态（或者可以加一个LOADING的提示框让用户了解数据读取的状态），只有当接收到全部数据后才更新相应部分的内容，而这种更新也是瞬间的，用户几乎感觉不到。总之用户是很敏感的，他们能感觉到你对他们的体贴，虽然不太可能立竿见影的效果，但会在用户的心中一点一滴的积累他们对网站的依赖。<br /></div>
+3、更好的用户体验；<br />　　4、也可以把以前的一些服务器负担的工作转嫁到客户端，利于客户端闲置的处理能力来处理，减轻服务器和带宽的负担，节约空间和带宽租用成本；<br />　　5、Ajax由于可以调用外部数据；<br />　　6、基于标准化的并被广泛支持和技术，并且不需要插件或下载小程序；<br />　　7、Ajax使WEB中的界面与应用分离（也可以说是数据与呈现分离）；<br />　　8、对于用户和ISP来说是双盈的。<br /><br /><span style="font-weight: bold;">AJAX现阶段的问题有哪些？</span><br />
+<div>　　1、一些手持设备（如手机、PDA等）现在还不能很好的支持Ajax；<br />　　2、用JavaScript作的Ajax引擎，JavaScript的兼容性和DeBug都是让人头痛的事；<br />　　3、Ajax的无刷新重载，由于页面的变化没有刷新重载那么明显，所以容易给用户带来困扰――用户不太清楚现在的数据是新的还是已经更新过的；现有的解决有：在相关位置提示、数据更新的区域设计得比较明显、数据更新后给用户提示等；<br />　　4、对流媒体的支持没有FLASH、Java  Applet好；<br /></div>
+课间休息遗留问题<br />
+<div>　　更好的Ajax应用，需要更多的客户端的开发，和对当前的WEB应用理念的思考，而且良好的用户体验，来源于为处处用户考虑的理念，而不单纯是某种技术。</div>
+</div>
+
+
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare" style="float: right;">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more">更多</span>
+<a class="shareCount"></a>
+</div>
+<!-- Baidu Button END -->
+
+
+<!--192.168.100.33-->
+<div class="article_next_prev">
+            <li class="next_article"><span>下一篇：</span><a href="/weihj1999/article/details/1371157">Oracle 的入门心得</a></li>
+</div>
+
+<!-- Baidu Button BEGIN -->
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=1536434" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+    document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+</div>
+    <div id="ad_cen">
+        <script type="text/javascript">            BAIDU_CLB_SLOT_ID = "117306";</script>
+        <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+    </div>
+    <script type="text/javascript">
+        //new Ad(4, 'ad_cen');
+    </script>
+<div id="comment_title" class="panel_head">
+    查看评论<a name="comments"></a></div>
+<div id="comment_list">
+</div>
+<div id="comment_bar">
+</div>
+<div id="comment_form">
+</div>
+<div class="announce">
+    * 以上用户言论只代表其个人观点，不代表CSDN网站的观点或立场<a name="reply"></a><a name="quote"></a></div>
+<script type="text/javascript">
+    var fileName = '1370794';
+    var commentscount = 0;
+    var islock = false
+</script>
+<script type="text/javascript" src="http://static.blog.csdn.net/scripts/comment.js"></script>
+    <div id="ad_bot">
+    </div>
+    <script type="text/javascript">
+    new Ad(5, 'ad_bot');
+    </script>
+<div id="report_dialog">
+</div>
+<div id="d-top" style="display: none;">
+    <a id="d-top-a" href="#" title="回到顶部">
+        <img src="http://static.blog.csdn.net/images/top.png" alt="TOP" /></a>
+</div>
+<script type="text/javascript">
+    $(function ()
+    {
+        var d_top = $('#d-top');
+        document.onscroll = function ()
+        {
+            var scrTop = (document.body.scrollTop || document.documentElement.scrollTop);
+            if (scrTop > 500)
+            {
+                d_top.show();
+            } else
+            {
+                d_top.hide();
+            }
+        }
+        $('#d-top-a').click(function ()
+        {
+            scrollTo(0, 0);
+            this.blur();
+            return false;
+        });
+    });
+  
+</script>
+<style type="text/css">
+    .tag_list
+    {
+        background: none repeat scroll 0 0 #FFFFFF;
+        border: 1px solid #D7CBC1;
+        color: #000000;
+        font-size: 12px;
+        line-height: 20px;
+        list-style: none outside none;
+        margin: 10px 2% 0 1%;
+        padding: 1px;
+    }
+    .tag_list h5
+    {
+        background: none repeat scroll 0 0 #E0DBD3;
+        color: #47381C;
+        font-size: 12px;
+        height: 24px;
+        line-height: 24px;
+        padding: 0 5px;
+        margin: 0;
+    }
+    .tag_list h5 a
+    {
+        color: #47381C;
+    }
+    .classify
+    {
+        margin: 10px 0;
+        padding: 4px 12px 8px;
+    }
+    .classify a
+    {
+        margin-right: 20px;
+        white-space: nowrap;
+    }
+</style>
+<div class="tag_list">
+    <h5>
+        <a href="http://www.csdn.net/tag/" target="_blank">核心技术类目</a></h5>
+    <div class="classify">
+<a title="全部主题" href="http://www.csdn.net/tag" target="_blank" onclick="LogClickCount(this,336);">全部主题</a>
+<a title="Java" href="http://www.csdn.net/tag/Java" target="_blank" onclick="LogClickCount(this,336);">Java</a>
+<a title="VPN" href="http://www.csdn.net/tag/vpn" target="_blank" onclick="LogClickCount(this,336);">VPN</a>
+<a title="Android" href="http://www.csdn.net/tag/android" target="_blank" onclick="LogClickCount(this,336);">Android</a>
+<a title="iOS" href="http://www.csdn.net/tag/ios" target="_blank" onclick="LogClickCount(this,336);">iOS</a>
+<a title="ERP" href="http://www.csdn.net/tag/erp" target="_blank" onclick="LogClickCount(this,336);">ERP</a>
+<a title="IE10" href="http://www.csdn.net/tag/ie10" target="_blank" onclick="LogClickCount(this,336);">IE10</a>
+<a title="Eclipse" href="http://www.csdn.net/tag/eclipse" target="_blank" onclick="LogClickCount(this,336);">Eclipse</a>
+<a title="CRM" href="http://www.csdn.net/tag/crm" target="_blank" onclick="LogClickCount(this,336);">CRM</a>
+<a title="JavaScript" href="http://www.csdn.net/tag/javascript" target="_blank" onclick="LogClickCount(this,336);">JavaScript</a>
+<a title="Ubuntu" href="http://www.csdn.net/tag/ubuntu" target="_blank" onclick="LogClickCount(this,336);">Ubuntu</a>
+<a title="NFC" href="http://www.csdn.net/tag/nfc" target="_blank" onclick="LogClickCount(this,336);">NFC</a>
+<a title="WAP" href="http://www.csdn.net/tag/wap" target="_blank" onclick="LogClickCount(this,336);">WAP</a>
+<a title="jQuery" href="http://www.csdn.net/tag/jquery" target="_blank" onclick="LogClickCount(this,336);">jQuery</a>
+<a title="数据库" href="http://www.csdn.net/tag/数据库" target="_blank" onclick="LogClickCount(this,336);">数据库</a>
+<a title="BI" href="http://www.csdn.net/tag/bi" target="_blank" onclick="LogClickCount(this,336);">BI</a>
+<a title="HTML5" href="http://www.csdn.net/tag/html5" target="_blank" onclick="LogClickCount(this,336);">HTML5</a>
+<a title="Spring" href="http://www.csdn.net/tag/spring" target="_blank" onclick="LogClickCount(this,336);">Spring</a>
+<a title="Apache" href="http://www.csdn.net/tag/apache" target="_blank" onclick="LogClickCount(this,336);">Apache</a>
+<a title="Hadoop" href="http://www.csdn.net/tag/hadoop" target="_blank" onclick="LogClickCount(this,336);">Hadoop</a>
+<a title=".NET" href="http://www.csdn.net/tag/.net" target="_blank" onclick="LogClickCount(this,336);">.NET</a>
+<a title="API" href="http://www.csdn.net/tag/api" target="_blank" onclick="LogClickCount(this,336);">API</a>
+<a title="HTML" href="http://www.csdn.net/tag/html" target="_blank" onclick="LogClickCount(this,336);">HTML</a>
+<a title="SDK" href="http://www.csdn.net/tag/sdk" target="_blank" onclick="LogClickCount(this,336);">SDK</a>
+<a title="IIS" href="http://www.csdn.net/tag/iis" target="_blank" onclick="LogClickCount(this,336);">IIS</a>
+<a title="Fedora" href="http://www.csdn.net/tag/fedora" target="_blank" onclick="LogClickCount(this,336);">Fedora</a>
+<a title="XML" href="http://www.csdn.net/tag/xml" target="_blank" onclick="LogClickCount(this,336);">XML</a>
+<a title="LBS" href="http://www.csdn.net/tag/lbs" target="_blank" onclick="LogClickCount(this,336);">LBS</a>
+<a title="Unity" href="http://www.csdn.net/tag/unity" target="_blank" onclick="LogClickCount(this,336);">Unity</a>
+<a title="Splashtop" href="http://www.csdn.net/tag/splashtop" target="_blank" onclick="LogClickCount(this,336);">Splashtop</a>
+<a title="UML" href="http://www.csdn.net/tag/uml" target="_blank" onclick="LogClickCount(this,336);">UML</a>
+<a title="components" href="http://www.csdn.net/tag/components" target="_blank" onclick="LogClickCount(this,336);">components</a>
+<a title="Windows Mobile" href="http://www.csdn.net/tag/windowsmobile" target="_blank" onclick="LogClickCount(this,336);">Windows Mobile</a>
+<a title="Rails" href="http://www.csdn.net/tag/rails" target="_blank" onclick="LogClickCount(this,336);">Rails</a>
+<a title="QEMU" href="http://www.csdn.net/tag/qemu" target="_blank" onclick="LogClickCount(this,336);">QEMU</a>
+<a title="KDE" href="http://www.csdn.net/tag/kde" target="_blank" onclick="LogClickCount(this,336);">KDE</a>
+<a title="Cassandra" href="http://www.csdn.net/tag/cassandra" target="_blank" onclick="LogClickCount(this,336);">Cassandra</a>
+<a title="CloudStack" href="http://www.csdn.net/tag/cloudstack" target="_blank" onclick="LogClickCount(this,336);">CloudStack</a>
+<a title="FTC" href="http://www.csdn.net/tag/ftc" target="_blank" onclick="LogClickCount(this,336);">FTC</a>
+<a title="coremail" href="http://www.csdn.net/tag/coremail" target="_blank" onclick="LogClickCount(this,336);">coremail</a>
+<a title="OPhone " href="http://www.csdn.net/tag/ophone " target="_blank" onclick="LogClickCount(this,336);">OPhone </a>
+<a title="CouchBase" href="http://www.csdn.net/tag/couchbase" target="_blank" onclick="LogClickCount(this,336);">CouchBase</a>
+<a title="云计算" href="http://www.csdn.net/tag/云计算" target="_blank" onclick="LogClickCount(this,336);">云计算</a>
+<a title="iOS6" href="http://www.csdn.net/tag/iOS6" target="_blank" onclick="LogClickCount(this,336);">iOS6</a>
+<a title="Rackspace " href="http://www.csdn.net/tag/rackspace " target="_blank" onclick="LogClickCount(this,336);">Rackspace </a>
+<a title="Web App" href="http://www.csdn.net/tag/webapp" target="_blank" onclick="LogClickCount(this,336);">Web App</a>
+<a title="SpringSide" href="http://www.csdn.net/tag/springside" target="_blank" onclick="LogClickCount(this,336);">SpringSide</a>
+<a title="Maemo" href="http://www.csdn.net/tag/maemo" target="_blank" onclick="LogClickCount(this,336);">Maemo</a>
+<a title="Compuware" href="http://www.csdn.net/tag/compuware" target="_blank" onclick="LogClickCount(this,336);">Compuware</a>
+<a title="大数据" href="http://www.csdn.net/tag/大数据" target="_blank" onclick="LogClickCount(this,336);">大数据</a>
+<a title="aptech" href="http://www.csdn.net/tag/aptech" target="_blank" onclick="LogClickCount(this,336);">aptech</a>
+<a title="Perl" href="http://www.csdn.net/tag/perl" target="_blank" onclick="LogClickCount(this,336);">Perl</a>
+<a title="Tornado" href="http://www.csdn.net/tag/tornado" target="_blank" onclick="LogClickCount(this,336);">Tornado</a>
+<a title="Ruby" href="http://www.csdn.net/tag/ruby" target="_blank" onclick="LogClickCount(this,336);">Ruby</a>
+<a title="Hibernate" href="http://www.csdn.net/hibernate" target="_blank" onclick="LogClickCount(this,336);">Hibernate</a>
+<a title="ThinkPHP" href="http://www.csdn.net/tag/thinkphp" target="_blank" onclick="LogClickCount(this,336);">ThinkPHP</a>
+<a title="Spark" href="http://www.csdn.net/tag/spark" target="_blank" onclick="LogClickCount(this,336);">Spark</a>
+<a title="HBase" href="http://www.csdn.net/tag/hbase" target="_blank" onclick="LogClickCount(this,336);">HBase</a>
+<a title="Pure" href="http://www.csdn.net/tag/pure" target="_blank" onclick="LogClickCount(this,336);">Pure</a>
+<a title="Solr" href="http://www.csdn.net/tag/solr" target="_blank" onclick="LogClickCount(this,336);">Solr</a>
+<a title="Angular" href="http://www.csdn.net/tag/angular" target="_blank" onclick="LogClickCount(this,336);">Angular</a>
+<a title="Cloud Foundry" href="http://www.csdn.net/tag/cloudfoundry" target="_blank" onclick="LogClickCount(this,336);">Cloud Foundry</a>
+<a title="Redis" href="http://www.csdn.net/tag/redis" target="_blank" onclick="LogClickCount(this,336);">Redis</a>
+<a title="Scala" href="http://www.csdn.net/tag/scala" target="_blank" onclick="LogClickCount(this,336);">Scala</a>
+<a title="Django" href="http://www.csdn.net/tag/django" target="_blank" onclick="LogClickCount(this,336);">Django</a>
+<a title="Bootstrap" href="http://www.csdn.net/tag/bootstrap" target="_blank" onclick="LogClickCount(this,336);">Bootstrap</a>
+    </div>
+</div>
+
+                    <div class="clear">
+                    </div>
+                </div>
+            </div>
+            <div id="side">
+    <div class="side">
+<div id="panel_Profile" class="panel">
+<ul class="panel_head"><span>个人资料</span></ul>
+<ul class="panel_body profile">
+<div id="blog_userface">
+    <a href="http://my.csdn.net/weihj1999" target="_blank">
+    <img src="http://avatar.csdn.net/2/8/D/1_weihj1999.jpg" title="访问我的空间" style="max-width:90%"/>
+    </a>
+    <br />
+    <span><a href="http://my.csdn.net/weihj1999" class="user_name" target="_blank">weihj1999</a></span>
+</div>
+<div class="interact">
+<a href="javascript:void(0);" class="attent" id="span_add_follow" title="[加关注]"></a>
+<a href="javascript:void(0);" class="letter" onclick="loginto(1)" title="[发私信]"></a>
+</div>
+<div id="blog_medal">
+</div>
+<ul id="blog_rank">
+    <li>访问：<span>49401次</span></li>
+    <li>积分：<span>782分</span></li>
+    <li>排名：<span>第17387名</span></li>
+</ul>
+<ul id="blog_statistics">
+    <li>原创：<span>20篇</span></li>
+    <li>转载：<span>49篇</span></li>
+    <li>译文：<span>1篇</span></li>
+    <li>评论：<span>2条</span></li>
+</ul>
+</ul>
+</div>
+
+
+<div class="panel" id="panel_Search">
+    <ul class="panel_head"><span>文章搜索</span></ul>
+    <ul class="panel_body">
+        <form id="frmSearch" action="http://so.csdn.net/search" class="form_search" target="_blank">
+        <span><input id="inputSearch" type="text" class="blogsearch" title="请输入关键字" /></span>
+        <input id="btnSubmit" type="submit" value="搜索" title="search in blog" />
+        <input type="hidden" name="q" id="inputQ" />
+        <input type="hidden" name="t" value="blog" />
+        <a id="btnSearchBlog" target="_blank"></a>
+        </form>
+    </ul>
+</div><div id="panel_Category" class="panel">
+<ul class="panel_head"><span>文章分类</span></ul>
+<ul class="panel_body">
+<li>
+<a href="http://blog.csdn.net/weihj1999/article/category/252624">AJAX</a><span>(1)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/weihj1999/article/category/252673">DBSQL</a><span>(2)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/weihj1999/article/category/267805">Domino</a><span>(2)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/weihj1999/article/category/252442">Java</a><span>(10)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/weihj1999/article/category/252466">QA</a><span>(16)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/weihj1999/article/category/252707">UNIX</a><span>(26)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/weihj1999/article/category/259548">工作记录</a><span>(2)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/weihj1999/article/category/270825">开运通</a><span>(1)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/weihj1999/article/category/258132">日常心得</a><span>(6)</span>
+</li>
+</ul>
+</div><div id="panel_Archive" class="panel">
+<ul class="panel_head"><span>文章存档</span></ul>
+<ul class="panel_body">
+<div id="archive_list">
+<!--归档统计-->
+<li><a href="http://blog.csdn.net/weihj1999/article/month/2007/10">2007年10月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/weihj1999/article/month/2007/04">2007年04月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/weihj1999/article/month/2007/02">2007年02月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/weihj1999/article/month/2007/01">2007年01月</a><span>(5)</span></li><li><a href="http://blog.csdn.net/weihj1999/article/month/2006/12">2006年12月</a><span>(10)</span></li><li><a href="http://blog.csdn.net/weihj1999/article/month/2006/11">2006年11月</a><span>(52)</span></li>
+</div>
+</ul>
+</div>
+<div id="hotarticls" class="panel">
+<ul class="panel_head"><span>阅读排行</span></ul>
+<ul class="panel_body itemlist">
+<li>
+<a href="/weihj1999/article/details/1513043" title="教你怎么处理sqm文件">教你怎么处理sqm文件</a><span>(5156)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1370794" title="AJAX技术初探">AJAX技术初探</a><span>(2097)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1376221" title="QA常见面试问题答与问(持续更新)">QA常见面试问题答与问(持续更新)</a><span>(1850)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1448467" title="[解梦]梦到有好多小小的黑色虫子">[解梦]梦到有好多小小的黑色虫子</a><span>(1848)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1446889" title="疯狂元宝的代码分析 揭露恶心的腾讯">疯狂元宝的代码分析 揭露恶心的腾讯</a><span>(1709)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1471172" title="学用Lotus办公——电子邮件系统的创建">学用Lotus办公——电子邮件系统的创建</a><span>(1511)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1429582" title="快捷键下面的下划线，如何控制其是否主动显示？">快捷键下面的下划线，如何控制其是否主动显示？</a><span>(1172)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1423265" title="Sticky Keys,  Toggle Keys  and Filter Keys">Sticky Keys,  Toggle Keys  and Filter Keys</a><span>(1015)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1467354" title="UNIX目录简介">UNIX目录简介</a><span>(990)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1383610" title="高级Bash脚本编程指南学习笔记">高级Bash脚本编程指南学习笔记</a><span>(896)</span>
+</li>
+</ul>
+</div>
+<div id="hotarticls2" class="panel">
+<ul class="panel_head"><span>评论排行</span></ul>
+<ul class="panel_body itemlist">
+<li>
+<a href="/weihj1999/article/details/1446889" title="疯狂元宝的代码分析 揭露恶心的腾讯">疯狂元宝的代码分析 揭露恶心的腾讯</a><span>(1)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1479800" title="i5/OS操作系统">i5/OS操作系统</a><span>(1)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1826816" title="Using a Java class to control directory searches for people and groups">Using a Java class to control directory searches for people and groups</a><span>(0)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1415058" title="美国联邦2007夏令时改变详述">美国联邦2007夏令时改变详述</a><span>(0)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1414082" title="偶然性不可重现BUG怎么处理？">偶然性不可重现BUG怎么处理？</a><span>(0)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1414077" title="关于程序员与测试员的关系">关于程序员与测试员的关系</a><span>(0)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1409446" title="如何有效地报告 Bug">如何有效地报告 Bug</a><span>(0)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1409432" title="如何报告Bug，常用信息的收集，方法等">如何报告Bug，常用信息的收集，方法等</a><span>(0)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1401706" title="软件测试停止标准">软件测试停止标准</a><span>(0)</span>
+</li>
+<li>
+<a href="/weihj1999/article/details/1401696" title="怎样成为一个合格的测试工程师">怎样成为一个合格的测试工程师</a><span>(0)</span>
+</li>
+</ul>
+</div>
+<div id="homepageArticles" class="panel tracking-ad" data-mod="popu_4">
+<ul class="panel_head"><span>推荐文章</span></ul>
+<ul class="panel_body" id="ad_commend"></ul>
+</div>
+<script type="text/javascript">
+ new Ad(12, 'ad_commend');
+</script><div id="newcomments" class="panel">
+<ul class="panel_head"><span>最新评论</span></ul>
+<ul class="panel_body itemlist">
+    <li>
+    <a href="/weihj1999/article/details/1479800#comments">i5/OS操作系统</a>
+    <p style="margin:0px;"><a href="/匿名用户" class="user_name">匿名用户</a>:
+
+    </p>
+    </li>
+    <li>
+    <a href="/weihj1999/article/details/1446889#comments">疯狂元宝的代码分析 揭露恶心的腾讯</a>
+    <p style="margin:0px;"><a href="/henterbbs" class="user_name">henterbbs</a>:
+高手就是高手！！！ 小弟佩服！！！
+    </p>
+    </li>
+</ul>
+</div>
+<div id="custom_column_972940" class="panel">
+<ul class="panel_head"><span>程序员群</span></ul>
+<ul class="panel_body">
+<ul><li><a href="http://blog.csdn.net/javaprogramers" target=_blank>JavaProgramers的专栏</a> (<a href="http://blog.csdn.net/javaprogramers/Rss.aspx" target=_blank>RSS</a>)</li></ul>
+</ul>
+</div><div id="custom_column_972941" class="panel">
+<ul class="panel_head"><span>生活</span></ul>
+<ul class="panel_body">
+<ul><li><a href="http://baichen.blogchinese.com/915/101570/index.shtml" target=_blank>白尘的原创小说工作室</a></li></ul>
+</ul>
+</div>    </div>
+    <div class="clear">
+    </div>
+</div>
+
+            <div class="clear">
+            </div>
+        </div>
+        
+
+<script type="text/javascript" src="http://static.blog.csdn.net/scripts/newblog.min.js"></script>
+<script type="text/javascript" src="http://medal.blog.csdn.net/showblogmedal.ashx?blogid=163855"></script>
+<script type="text/javascript">
+    document.write('<script type="text/javascript" src="http://csdnimg.cn/pubfooter/js/publib_footer.js?' + Math.floor(new Date() / 120000).toString(36) + '="></' + 'script>');
+</script>
+    <script type="text/javascript" src="http://passport.csdn.net/content/loginbox/login.js"></script>
+<script type="text/javascript">document.write("<img src=http://counter.csdn.net/pv.aspx?id=24 border=0 width=0 height=0>");</script>
+<script type="text/javascript" src="http://www.csdn.net/ui/scripts/Csdn/counter.js"></script>
+<script type="text/javascript" src="http://ad.csdn.net/scripts/ad-blog.js"></script>
+<script type="text/javascript" src="http://zz.csdn.net/js/count.js"></script>
+<script type="text/javascript">
+    $(function () {
+        function __get_code_toolbar(snippet_id) {
+            return $("<a href='https://code.csdn.net/snippets/"
+                    + snippet_id
+                    + "' target='_blank' title='在CODE上查看代码片' style='text-indent:0;'><img src='https://code.csdn.net/assets/CODE_ico.png' width=12 height=12 alt='在CODE上查看代码片' style='position:relative;top:1px;left:2px;'/></a>"
+                    + "<a href='https://code.csdn.net/snippets/"
+                    + snippet_id
+                    + "/fork' target='_blank' title='派生到我的代码片'  style='text-indent:0;'><img src='https://code.csdn.net/assets/ico_fork.svg' width=12 height=12 alt='派生到我的代码片' style='position:relative;top:2px;left:2px;'/></a>");
+        }
+        
+        $("[code_snippet_id]").each(function () {
+            __s_id = $(this).attr("code_snippet_id");
+            if (__s_id != null && __s_id != "" && __s_id != 0 && parseInt(__s_id) > 70020) {
+                __code_tool = __get_code_toolbar(__s_id);
+                $(this).prev().find(".tools").append(__code_tool);
+            }
+        });
+    });
+</script>
+
+    </div>
+</body>
+</html>
