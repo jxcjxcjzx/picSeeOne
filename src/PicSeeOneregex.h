@@ -1,6 +1,8 @@
 #ifndef PICSEEONEREGEX_H
 #define PICSEEONEREGEX_H
 #include <QStringList> 
+#include "PicApp.h"
+#include "BasicLogicHandle.h"   
 
 enum RequestType{
 NoOptions,

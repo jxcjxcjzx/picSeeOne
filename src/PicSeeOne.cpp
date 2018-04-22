@@ -15,6 +15,10 @@
 #include <QRegExp>
 #include <qpixmap.h>
 #include <qpainter.h>
+// test area 
+#include <QListView>
+#include "SuggestProvider.h"
+#include "HisLogRecord.h"
 
 PicSeeOne::PicSeeOne()
 {
@@ -32,6 +36,12 @@ medit = new QLineEdit(this);
 BillBoard = new QLineEdit(this);
 medit->setGeometry(10,30,360,30);
 BillBoard->setGeometry(440,30,300,22);
+
+// test area
+QListView *listbox = new QListView(this);
+listbox->setGeometry(10,60,360,30) ;
+listbox->setRowHidden(1,true);
+
 QString mystring;
 medit->insert("qt");
 connect(medit,SIGNAL(returnPressed()),this,SLOT(repaint()));
@@ -74,6 +84,15 @@ case Qt::Key_Left:
 PicSeeOne::pre_pic();
 break;
 }
+// we set many keys to no input effect
+case Qt::Key_Shift:{break;}
+case Qt::Key_Control:{break;}
+case Qt::Key_Alt:{break;}
+case Qt::Key_Down:{break;}
+case Qt::Key_Up:{break;}
+case Qt::Key_CapsLock:{break;}
+case Qt::Key_NumLock:{break;}
+
 case Qt::Key_Return:
 {
 break;

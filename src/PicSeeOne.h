@@ -16,6 +16,10 @@
 #include <qpainter.h>
 #include <QFrame>
 
+// here is the testing area
+#include "PicApp.h"
+#include "BasicLogicHandle.h"
+
 class PicSeeOne:public QFrame 
 {
 public:

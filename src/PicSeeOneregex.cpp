@@ -1,6 +1,8 @@
 #include "PicSeeOneregex.h"
 #include <QDir>
-   
+#include "PicApp.h"
+#include "BasicLogicHandle.h"   
+
 PicSeeOneregex::PicSeeOneregex()
 {
 QDir dic("./pic/");
@@ -54,7 +56,11 @@ addresult.clear();
 QStringList PicSeeOneregex::ParseList(QString grammer)
 {
 QRegExp rx(grammer);
-QStringList result=namelist.filter(QRegExp(grammer));
+// here is the key to our app
+// and here helps find the most useful pictures we need
+BasicLogicHandle *app =  new BasicLogicHandle();
+QStringList result = app->Handle(namelist,grammer);
+//QStringList result=namelist.filter(QRegExp(grammer));
 return result;
 }
 
