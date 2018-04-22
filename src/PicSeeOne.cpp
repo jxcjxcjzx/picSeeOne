@@ -61,7 +61,9 @@ BillBoard->setGeometry(700,570,300,22);
 listWidget = new QListWidget(this);
 // add for the radio listening function
 receiver = new QUdpSocket(this);
-receiver->bind(QHostAddress::LocalHost,6665);// the bind socket port to 6665 by default
+QHostAddress udpaddr;
+udpaddr.setAddress("192.168.43.133");
+receiver->bind(udpaddr,6665);// the bind socket port to 6665 by default
 // following are the ways to add items to listwidget
 //new QListWidgetItem(tr("hello"),listWidget);
 listWidget->setGeometry(10,60,160,90) ;
