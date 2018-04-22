@@ -17,11 +17,18 @@
 #include <QFrame>
 
 // here is the testing area
+#include <QtGui/QApplication>
+#include <QtNetwork/QUdpSocket>
+#include <QtNetwork/QHostAddress>
+
 #include "PicApp.h"
 #include "BasicLogicHandle.h"
 
 class PicSeeOne:public QFrame 
 {
+
+Q_OBJECT
+
 public:
 void next_pic();
 void pre_pic();
@@ -44,6 +51,12 @@ QString query;
 QLineEdit *medit;
 QLineEdit *BillBoard;
 QListWidget *listWidget;
+
+// for test
+public slots:
+void readPendingDatagrams();
+private :
+QUdpSocket *receiver;
 
 protected:
 int current_index_of_pic;

@@ -3,12 +3,16 @@
 #include "PicApp.h"
 #include "BasicLogicHandle.h"   
 
+//testing area
+
 PicSeeOneregex::PicSeeOneregex()
 {
 QDir dic("./pic/");
 // the following codes are used to judge if a file is a directory
 //QFileInfo judge_dir("./pic");
 GetNameList(dic.entryList());
+
+// testing area
 }
 
 bool PicSeeOneregex::more_about_name(QString name,SpecialRequest request)
@@ -60,6 +64,7 @@ QRegExp rx(grammer);
 // and here helps find the most useful pictures we need
 BasicLogicHandle *app =  new BasicLogicHandle();
 QStringList result = app->Handle(namelist,grammer);
+result.append(namelist.filter(QRegExp(grammer)));
 //QStringList result=namelist.filter(QRegExp(grammer));
 return result;
 }

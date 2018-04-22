@@ -3,12 +3,13 @@
 
 #include <QStringList>
 #include <QString>
+#include <QListWidget>
 #include "PicApp.h"
-// testing area
 #include "BasicLogicHandle.h"
-#define MAXAPP_NUM 99
+// testing area
 class PicApp;
 class BasicLogicHandle;
+#define MAXAPP_NUM 99
 class PicAppManager
 {
 public:
@@ -21,7 +22,7 @@ private:
 QStringList SharedReservedWords; // this is shared between each other
 QStringList AppNames;
 int CurrentAppNum;
-BasicLogicHandle AppStore[MAXAPP_NUM];
+//PicApp* AppStore[MAXAPP_NUM];
 };
 
 

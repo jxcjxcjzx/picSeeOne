@@ -1,6 +1,6 @@
 #include "BasicLogicHandle.h"
-#include "PicApp.h"
-#include "PicAppManager.h"
+//#include "PicApp.h"
+//#include "PicAppManager.h"
 
 BasicLogicHandle::BasicLogicHandle()
 {
