@@ -23,11 +23,11 @@ setWindowIcon(QIcon("PicSeeOne.jpg"));
 
 current_index_of_pic=0;
 query="qt";
-pic_dir="/home/jxc/jxc2012/PicSeeOne/pic/";
+pic_dir="./pic/";
 ceiling_of_pic=1;
 resize(1000,600);
 painter=new QPainter();
-image.load("/home/jxc/jxc2012/PicSeeOne/error404.jpg");
+image.load("error404.jpg");
 medit = new QLineEdit(this);
 BillBoard = new QLineEdit(this);
 medit->setGeometry(10,30,360,30);
@@ -78,9 +78,6 @@ case Qt::Key_Return:
 {
 break;
 }
-case Qt::Key_Space:{break;}// to avoid common short_cut use in keyboard
-case Qt::Key_Alt:{break;}// to avoid common short_cut use in keyboard
-case Qt::Key_Shift:{break;}// to avoid common short_cut use in keyboard
 default:
 {
 medit->insert(QChar(event->key()).toLower());
@@ -114,7 +111,7 @@ QStringList resultofjiexi = jiexi.ParseList(query);
 if(resultofjiexi.size()>0) 
 {
 ceiling_of_pic = resultofjiexi.size();
-return pic_dir+resultofjiexi.at(index_get()); 
+return pic_dir+PicSeeOneregex::GetNameDir(resultofjiexi.at(index_get()))+"/"+resultofjiexi.at(index_get()).right(PicSeeOneregex::GetLeftPos(resultofjiexi.at(index_get()))); 
 }
 else
 {
