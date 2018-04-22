@@ -6,6 +6,8 @@ BasicLogicHandle::BasicLogicHandle()
 {
 ReservedWords.append("&");
 ReservedWords.append("||");
+OpenOrder = "set basic on";
+CloseOrder = "set basic off";
 }
 
 QStringList BasicLogicHandle::Handle(QStringList list, QString wordin)

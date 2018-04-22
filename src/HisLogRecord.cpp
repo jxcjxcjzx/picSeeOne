@@ -11,4 +11,33 @@ private:
 QStringList loglist;
 };
 */
+void HisLogRecord::AddOne(QString record)
+{
+this->loglist.append(record);
+}
 
+void HisLogRecord::WriteToFile()
+{
+
+}
+
+QStringList HisLogRecord::GetCurrentList(int limits)
+{
+if(limits==0)
+{
+// then we just return the whole record to the caller
+return this->loglist;
+}
+else
+{
+if(limits<this->loglist.size())
+{
+QStringList forreturn;
+for(int i=0;i<limits;i++)
+{
+forreturn.append(this->loglist.at(i));
+}
+return forreturn;
+}
+}
+}

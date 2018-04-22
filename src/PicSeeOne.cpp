@@ -17,6 +17,7 @@
 #include <qpainter.h>
 // test area 
 #include <QListView>
+#include <QListWidget>
 #include "SuggestProvider.h"
 #include "HisLogRecord.h"
 
@@ -35,12 +36,17 @@ image.load("error404.jpg");
 medit = new QLineEdit(this);
 BillBoard = new QLineEdit(this);
 medit->setGeometry(10,30,360,30);
-BillBoard->setGeometry(440,30,300,22);
+BillBoard->setGeometry(700,570,300,22);
 
 // test area
-QListView *listbox = new QListView(this);
-listbox->setGeometry(10,60,360,30) ;
-listbox->setRowHidden(1,true);
+listWidget = new QListWidget(this);
+// following are the ways to add items to listwidget
+//new QListWidgetItem(tr("hello"),listWidget);
+//new QListWidgetItem(tr("ni hao"),listWidget);
+listWidget->setGeometry(10,60,160,90) ;
+//QListView *listbox = new QListView(this);
+//listbox->setGeometry(10,60,360,30) ;
+//listbox->setRowHidden(1,true);
 
 QString mystring;
 medit->insert("qt");
@@ -49,27 +55,34 @@ connect(medit,SIGNAL(returnPressed()),this,SLOT(setFocus()));
 connect(medit,SIGNAL(returnPressed()),medit,SLOT(clear()));
 connect(medit,SIGNAL(returnPressed()),medit,SLOT(hide()));
 }
+
 PicSeeOne::~PicSeeOne()
 {
 delete medit;
+delete listWidget;
 delete BillBoard;
 }
+
 int PicSeeOne::index_get()
 {
 return current_index_of_pic;
 }
+
 void PicSeeOne::index_forward()
 {
 current_index_of_pic++;
 }
+
 void PicSeeOne::index_back()
 {
 current_index_of_pic--;
 }
+
 int PicSeeOne::ceiling_get()
 {
 return ceiling_of_pic;
 }
+
 void PicSeeOne::keyPressEvent(QKeyEvent *event)
 {
 switch(event->key())
@@ -95,6 +108,7 @@ case Qt::Key_NumLock:{break;}
 
 case Qt::Key_Return:
 {
+listWidget->hide();
 break;
 }
 default:
@@ -102,6 +116,8 @@ default:
 medit->insert(QChar(event->key()).toLower());
 medit->setFocus();
 medit->show();
+//here is where the suggester take effect and codes will be added later
+listWidget->show();
 }
 }
 }

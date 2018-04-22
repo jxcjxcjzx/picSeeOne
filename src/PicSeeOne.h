@@ -43,6 +43,8 @@ QString pic_dir;
 QString query;
 QLineEdit *medit;
 QLineEdit *BillBoard;
+QListWidget *listWidget;
+
 protected:
 int current_index_of_pic;
 int ceiling_of_pic;
