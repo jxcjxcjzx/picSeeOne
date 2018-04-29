@@ -1,0 +1,54 @@
+import java.io.*;
+import java.util.regex.*;
+import java.net.*;
+
+public class Baidupro {
+	public static void main(String[] args){
+		try	{
+	         boolean readstrict = false ; 
+	         int readjishu = 0;
+             boolean down = true;
+			 String strUrl = "http://zhidao.baidu.com/question/121390537.html";         
+			 BufferedReader store = new BufferedReader(new FileReader("ku.txt")); 
+		    	while((strUrl=store.readLine())!=null)
+		    	{ 
+		    		readjishu++;
+		    		if(readjishu>2000)
+		    		{
+		    		   readstrict = true ; 
+		    		}
+		    		if(readstrict)
+		    		{
+		    		   break;
+		    		}
+				    down = true ; 	
+					URL url = new URL(strUrl);                              
+					InputStreamReader isr = new InputStreamReader(url.openStream(),"gbk"); 
+					Pattern p2 = Pattern.compile("<title>(.*)</title>");
+					BufferedReader br = new BufferedReader(isr);
+					String str = null;
+			while ((str=br.readLine() )!= null) {
+			        
+				    Matcher m = p2.matcher(str);
+					if (m.find()) {
+
+						 System.out.println(m.group(1));
+					     down = false ; 
+					}
+					if(!down)
+					{
+						break;
+					}
+					else
+					{
+						
+					}
+			    }	   
+			br.close();
+		    }
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

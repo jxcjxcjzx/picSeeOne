@@ -1,0 +1,40 @@
+import java.io.*;
+import java.net.URL;
+import java.util.regex.*;
+
+public class doubleacts {
+	
+	public static void main(String[] args) {
+		try	{
+			Pattern myinterest = Pattern.compile(".*title(.*)");
+			Pattern aftermatch = Pattern.compile("([^>]+)</a>");
+		
+			 String strUrl = "http://www.douban.com/location/nanjing/";       
+			 URL url = new URL(strUrl);                              
+		    InputStreamReader isr = new InputStreamReader(url.openStream(),"utf-8"); 
+			BufferedReader br = new BufferedReader(isr);
+			String str = null;
+			while ((str=br.readLine() )!= null) {
+
+				Matcher m2 = myinterest.matcher(str);
+				
+				
+				if(m2.matches())
+				{
+				   Matcher m4 = aftermatch.matcher(m2.group(1).toString());
+				   if(m4.find())
+					{
+					  System.out.println(m4.group(1));
+					}
+				
+				}
+				
+		
+				
+			
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+} 

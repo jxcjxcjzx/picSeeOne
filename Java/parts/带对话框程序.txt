@@ -1,0 +1,76 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class shiyan extends JFrame implements ActionListener {
+int row=10, col=40;
+JPanel p1=new JPanel(), p2=new JPanel();
+JTextArea ta=new JTextArea("文本区行数:"+row+" 列数:"+col, row, col);
+JScrollPane scrollPane=new JScrollPane(ta);
+JButton exit=new JButton("关闭");
+JButton dialog=new JButton("对话框");
+shiyan () {
+setTitle("带有对话框的父窗口");
+setSize(500,200);
+setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+getContentPane().setLayout(new BorderLayout());
+getContentPane().add(p1,BorderLayout.CENTER);
+getContentPane().add(p2,BorderLayout.SOUTH);
+p1.add(scrollPane);
+p2.add(exit); p2.add(dialog);
+exit.addActionListener(this);
+dialog.addActionListener(this);
+show();
+}
+public static void main(String args[]) {
+new shiyan ();
+}
+public void actionPerformed(ActionEvent e) {
+if (e.getSource()==exit)
+System.exit(0);
+else {
+MyDialog dlg=new MyDialog(this, true);
+dlg.show();
+}
+}
+class MyDialog extends Dialog implements ActionListener {
+Label label1=new Label("请输入行数");
+Label label2=new Label("请输入列数");
+TextField rows=new TextField(15);
+TextField columns=new TextField(15);
+JButton OK=new JButton("确定");
+JButton Cancel=new JButton("取消");
+MyDialog(shiyan parent, boolean modal) {
+super(parent,modal);
+setTitle("自定义对话框");
+setSize(260,140);
+setResizable(false);
+setLayout(new FlowLayout());
+add(label1);
+add(rows);
+add(label2);
+add(columns);
+rows.setText(Integer.toString(ta.getRows()));
+columns.setText(Integer.toString(ta.getColumns()));
+add(OK);
+add(Cancel);
+OK.addActionListener(this);
+Cancel.addActionListener(this);
+addWindowListener(new WindowAdapter(){//对话框关闭事件
+public void windowClosing(WindowEvent e){
+dispose();//释放对话框资源
+}
+});
+}
+public void actionPerformed(ActionEvent e) {
+if(e.getSource()==OK) {
+int row=Integer.parseInt(rows.getText());
+int col=Integer.parseInt(columns.getText());
+ta.setRows(row);
+ta.setColumns(col);
+ta.setText("文本区行数:"+row+" 列数:"+col);
+show();
+}
+dispose();
+}
+}
+}

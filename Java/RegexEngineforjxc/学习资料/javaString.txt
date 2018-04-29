@@ -1,0 +1,69 @@
+private static String checkXMLName(String name) {
+// Cannot be empty or null
+if ((name == null) || (name.length() == 0) || (name.trim( ).equals(""))) {
+return "XML names cannot be null or empty";
+}
+// Cannot start with a number
+char first = name.charAt(0);
+if (Character.isDigit(first)) {
+return "XML names cannot begin with a number.";
+}
+// Cannot start with a $
+if (first == '$') {
+return "XML names cannot begin with a dollar sign ($).";
+}
+// Cannot start with a _
+if (first == '-') {
+return "XML names cannot begin with a hyphen (-).";
+}
+// Ensure valid content
+for (int i=0, len = name.length( ); i<len; i++) {
+char c = name.charAt(i);
+if ((!Character.isLetterOrDigit(c))
+&& (c != '-')
+&& (c != '$')
+&& (c != '_')) {
+return c + " is not allowed in XML names.";
+}
+}
+// We got here, so everything is OK
+return null;
+}
+
+
+
+
+
+
+
+
+
+
+
+oid parseWinLoss(String[] lines) {
+Pattern p = Pattern.compile("\\s+([\\w\\d]+):\\s'(.*)',?");
+String teamCode = "";
+int wins = 0;
+int losses = 0;
+for (int i = 0; i < lines.length; i++) {
+Matcher m = p.matcher(lines[i]);
+if (m.matches( )) {
+String attr = m.group(1);
+String value = m.group(2);
+if (attr.equals("code")) {
+teamCode = value;
+} else if (attr.equals("w")) {
+wins = int(value);
+} else if (attr.equals("l")) {
+losses = int(value);
+}
+} else {
+if (lines[i].startsWith("}")) {
+// This is the end of a group; print the values.
+println(teamCode + " " + wins + "-" + losses);
+}
+}
+}
+}
+
+

@@ -1,0 +1,156 @@
+package com.example.realcoding;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class MainActivity extends Activity {
+
+	
+	private Socket codeSocket = null;
+	private PrintWriter output = null;
+	private TextView tv = null;
+	private TextView result = null;
+	private EditText code_area = null;
+	private InputStream input = null;
+	
+	private static final String CODE_DATA = "#include <stdio.h> \n" +
+			"int main(){\n" +
+			"printf(\"hello pcduino\")"+";"+
+			" \n return 0; \n }"+
+			"/* this is the lastlineofcodearea */";
+	private static final String MYTAG = "MYTCP";
+	private static final String MYTCP = "TCP";
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		
+		tv = (TextView)this.findViewById(R.id.textView1);
+		result = (TextView)this.findViewById(R.id.textView2);
+		code_area = (EditText)this.findViewById(R.id.editText1);
+		Button sendinfo = (Button)this.findViewById(R.id.button1);
+		Button execcode = (Button)this.findViewById(R.id.button2);
+		sendinfo.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				//Log.d(MYTAG, "clicked");
+				try {
+					connect();
+					sendCodeInfo2();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				// close the link
+				/*
+					try {
+						codeSocket.close();
+						output.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					*/
+					
+			}
+			
+		});
+		
+		
+		execcode.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				//Log.d(MYTAG, "clicked");
+				try {
+					getExecInfo();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			
+			}
+			
+		});
+
+		
+		connect();
+		
+		
+		
+		
+	}
+	
+	
+	private void connect(){ 
+		tv.setText("尝试连接\n"); 
+		try { 
+		codeSocket=new Socket("192.168.43.238",8000); 
+		output=new PrintWriter(codeSocket.getOutputStream(),true); 
+		input = codeSocket.getInputStream();
+		tv.setText("完成连接\n"); 
+		} catch (UnknownHostException e) { 
+		// TODO Auto-generated catch block 
+			tv.setText(e.getMessage());
+			e.printStackTrace(); 
+		} catch (IOException e) { 
+		// TODO Auto-generated catch block 
+			tv.setText(e.getMessage());
+			e.printStackTrace(); 			
+		} 
+		
+}
+	
+	public void sendCodeInfo2() throws IOException{
+		output.println(code_area.getText().toString()); 
+		output.println("/* this is the lastlineofcodearea */");
+		getExecInfo();
+	}
+	
+	public void getExecInfo() throws IOException{		
+		try {
+			
+			byte buffer[] = new byte[input.available()];			
+			input.read(buffer);
+			String msg = new String(buffer);
+			Log.d(MYTCP,msg);
+			result.setText(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
+
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+}

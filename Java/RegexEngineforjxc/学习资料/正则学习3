@@ -1,0 +1,60 @@
+正则表达式原理及引擎实现  
+
+2009-09-30 15:13:41|  分类： 技术专题 |字号 订阅
+转载请注明作者：phylips@bmy 出处： http://duanple.blog.163.com/blog/static/7097176720098303134160/
+ 
+
+概述
+
+在正则表达式领域，有一本广为推崇的书籍<<精通正则表达式>>，但是作者在书中的很多地方假设那些匹配引擎采用的是回溯的算法。但是实际情况是有些引擎采用的NFA，DFA模拟算法，比如grep，awk，sed，对于它们来说算法复杂度是多项式级的。同时采用回溯的一些引擎也在逐步改进，比如通过采用备忘录方法，记住已经回溯到达的状态，防止重复，也可以避免指数级的复杂度。
+
+所以实际上这本书中提到的很多优化方法，未来可能都是不必要的了。同时这本书对正则匹配引擎原理的介绍，也不过深入，只是一个概述性的，所以有些让我失望，因为当初买这本书的目的就是希望可以藉此深入正则匹配的内部原理。有鉴于此，所以才有了这一篇文章的诞生。这篇文章主要参考了Brian W. Kernighan and Rob Pike对正则表达式的一个递归实现，以及Russ Cox 所写的Regular Expression Matching Can Be Simple And Fast，这篇文章对grep的实现进行了更为详细的介绍。
+
+实现一个正则匹配引擎，实际上就类似与实现一个简单语言的编译器。一个正则表达式就是用正则符号写出的程序，我们要对这个式子进行语法分析，建立一个语法分析树，根据这个树生成NFA，如果采用NFA匹配的话，然后需要写出NFA模拟执行的程序，用来进行匹配。而正则匹配引擎，本身与lex的实现很类似，所以基本上可以了解到词法分析和语法分析的简单内容。所以一方面我们可以了解正则匹配最深层的原理，另一方面也是对编译原理的应用实践。而且工作量始终，一个简单的grep实现也就大概500c语言代码。
+
+当然设计时我们需要考虑这个正则匹配引擎的可扩展性，比如支持unicode，支持自定义的字符集合，可以方便添加一些新的运算，这样下了，我们可以方便的逐步实现一个linux的grep扩展。另外可以实现一个java版本的，以代替指数级复杂度的实现。
+
+首先我们来看一个简化了的正则表达式，以及如何用递归回溯的方式，以最少的代码实现它。
+
+然后再来看一个grep的NFA实现，实际上它的算法早在1968年Ken Thompson, “Regular expression search algorithm,”中发表了。然而到了今天，很多语言(perl python pcre库)的正则匹配引擎却采用了一些更为低级的算法，这样的一些算法主要利用了回溯的方法，但是极端情况下却会达到指数级的复杂度。采用这种回溯的方法可能是因为实现者已经忘记了Ken Thompson的算法。另一方面，很多语言的正则表达式引入了前向引用(backreference)。这样就使正则匹配超出了正则的范畴，这个情况下的匹配实际上是NP完全问题，一般也只能通过回溯解决，所以掌握递归回溯的方法也是一种需求。但是即使在这样的匹配中，我们仍然可以把NFA作为一种方案，在不出现backreference时使用NFA匹配。
+
+同时我们可以看到，在grep采用的是最短匹配算法，这是与该应用本身相关的，因为它的目的是搜索，但是对于一些以替换为目的的正则匹配，则希望找到那个最长的匹配，这也是很多其他语言比如perl采用的默认选择。
+
+递归实现
+
+一个简化定义下的纯递归实现，可以参考<<代码之美>>第一章，只选择了^.c*$这5个运算符
+
+#include <stdio.h> 
+#include <iostream> 
+int match_star(int c,char *regexp,char*text);
+int match_here(char *regexp,char*text){
+    if(regexp[0] == '\0')return 1;
+    if(regexp[1] == '*') return match_star(regexp[0],regexp+2,text);
+    if(regexp[0] == '$') return text[0] == '\0';
+    if(regexp[0] == '.' && text[0] != '\0')  return match_here(regexp+1,text+1);
+    if(regexp[0] == text[0] && text[0] != '\0')  return match_here(regexp+1,text+1);
+    return 0;
+
+}
+
+int match_star(int c,char *regexp,char*text){
+    do{
+        if(match_here(regexp,text) == 1) return 1;        
+    }
+    while((*text) != '\0' &&(*text++ == c || c == '.'));
+    return 0;
+}
+int main() 
+{ 
+  char *a = "a*$";
+  char *b = "aab";
+  printf("%d",match_here(a,b));
+  int printf = printf();
+  cout << printf;
+  getchar();
+  return 0; 
+} 
+
+NFA,DFA实现
+
+

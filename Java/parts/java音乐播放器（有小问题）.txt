@@ -1,0 +1,321 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import javax.media.bean.playerbean.*; //这个包要用到JMF
+
+public class ceshi3 extends JFrame implements Runnable {
+public JLabel shijian;
+private JSlider sldDiameter;
+public MediaPlayer soumd1;
+public JButton playSound,  stopsound;
+public JButton tjian, shanc, baocun, duqu;
+public JPanel jp_shijian, jp_yinyue, jp_liebiao, jp_jindu;
+public JList jl;
+int zongmiao=0;
+public Vector vector, mingcheng;
+boolean fo = false, geshi = false;
+JLabel jl1, jl2, sj1, sj2;
+JTextField jt1, jt2;
+JButton queding, xiugai;
+int zong = 0;
+int a = 0, b = 0, you = 1,mm=0;
+int fenzhong, miaozhong;
+
+public ceshi3() {
+  super("java课题之音乐播放器篇");
+  soumd1 = new MediaPlayer();
+  Container c = getContentPane();
+  c.setLayout(new FlowLayout());
+  mingcheng = new Vector();
+  jp_shijian = new JPanel();
+  shijian = new JLabel();
+  jp_shijian.add(shijian);
+  c.add(jp_shijian);
+
+  playSound = new JButton("播放");
+  stopsound = new JButton("停止");
+  jp_yinyue = new JPanel();
+  jp_yinyue.add(playSound);
+  jp_yinyue.add(stopsound);
+  c.add(jp_yinyue);
+
+  jp_jindu = new JPanel();
+  sj1 = new JLabel();
+  sj2 = new JLabel();
+  sldDiameter = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 0);
+  sldDiameter.setMajorTickSpacing(1);
+  sldDiameter.setPaintTicks(true);
+  jp_jindu.add(sj1);
+  jp_jindu.add(sldDiameter);
+  jp_jindu.add(sj2);
+  c.add(jp_jindu);
+
+  vector = new Vector();
+  jl = new JList(mingcheng); //构造一个 JList，使其显示指定 Vector 中的元素
+  jl.setVisibleRowCount(5);//设置 visibleRowCount 属性，对于不同的布局方向，此方法有不同的含义：对于 VERTICAL 布局方向，此方法设置要显示的首选行数（不要求滚动）；对于其他方向，它影响单元的包装
+  jl.setFixedCellHeight(40);//设置一个固定值，将用于列表中每个单元的高度
+  jl.setFixedCellWidth(265);
+  jl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+  c.add(new JScrollPane(jl));//视口。创建一个显示指定组件内容的 JScrollPane，只要组件的内容超过视图大小就会显示水平和垂直滚动条。
+
+  tjian = new JButton("添加");
+  shanc = new JButton("删除");
+  duqu = new JButton("导入");
+  baocun = new JButton("导出");
+  jp_liebiao = new JPanel();
+  jp_liebiao.add(tjian);
+  jp_liebiao.add(shanc);
+  jp_liebiao.add(baocun);
+  jp_liebiao.add(duqu);
+  c.add(jp_liebiao);
+
+  baocun.addActionListener(new ActionListener() {//用于接收操作事件的侦听器接口
+   public void actionPerformed(ActionEvent event) {
+    JFileChooser fileChooser = new JFileChooser(); 
+    fileChooser
+      .setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    if (fileChooser.showSaveDialog(ceshi3.this) == JFileChooser.APPROVE_OPTION) { // 弹出文件选择器,并判断是否点击了打开按钮..弹出一个 "Save File" 文件选择器对话框..选择确认（yes、ok）后返回该值
+     String fileName = fileChooser.getSelectedFile()
+       .getAbsolutePath(); // 得到选择文件或目录的绝对路径
+     mmm(vector, mingcheng, fileName);
+    }
+   }
+  });
+
+  duqu.addActionListener(new ActionListener() {
+   public void actionPerformed(ActionEvent event) {
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser
+      .setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); 
+    if (fileChooser.showOpenDialog(ceshi3.this) == JFileChooser.APPROVE_OPTION) { 
+     String fileName = fileChooser.getSelectedFile()
+       .getAbsolutePath(); 
+     try {
+      ObjectInputStream input = new ObjectInputStream(
+        new FileInputStream(fileName));
+      xinxi a1 = (xinxi) input.readObject();
+      mingcheng = a1.b;
+      vector = a1.a;
+      jl.setListData(mingcheng);
+     } catch (Exception e) {
+      e.printStackTrace();//将此 throwable 及其追踪输出至标准错误流。
+     }
+    }
+   }
+  });
+
+  playSound.addActionListener(new ActionListener() {
+   public void actionPerformed(ActionEvent e) {
+    if (jl.getSelectedIndex() >= 0) {//返回最小的选择单元索引；只选择了列表中单个项时，返回该选择。如果什么也没有选择，则返回 -1
+     String yy = (String) vector.get(jl.getSelectedIndex());
+     File ff = new File(yy);
+     if (ff.exists()) {
+      if (yy.matches("[\\S\\s]*.mp3")|| yy.matches("[\\S\\s]*.MP3")) {//\s 空白字符：[ \t\n\x0B\f\r] ..\S 非空白字符：[^\s]([\\S\\s]*)
+       if (soumd1 != null) {
+//        a = 0;
+        b = 0;
+        you = 0;
+        soumd1.stop();
+       }
+          soumd1.setMediaLocation("file:/" + yy);
+       soumd1.start();
+       geshi=true;
+       try {
+        Thread.sleep(500);//在指定的毫秒数内让当前正在执行的线程休眠（暂停执行），此操作受到系统计时器和调度程序精度和准确性的影响。
+       } catch (InterruptedException eee) {
+       }
+       zongmiao=(int)soumd1.getDuration().getSeconds();
+       String aa=fen(zongmiao);
+          sj2.setText(aa);
+      } else
+       JOptionPane.showMessageDialog(null,//JOptionPane 有助于方便地弹出要求用户提供值或向其发出通知的标准对话框..showMessageDialog 告知用户某事已发生。
+         "播放文件格式的有错,无法播放 建议删除");
+     } else
+      JOptionPane.showMessageDialog(null,
+        "此歌曲文件已经不存在,建议删除");
+    }
+    else
+     JOptionPane.showMessageDialog(null, "请选择音乐文件");
+   }
+  });
+  stopsound.addActionListener(new ActionListener() {
+   public void actionPerformed(ActionEvent e) {
+    //a = 0;
+    b = 0;
+    you = 0;
+    mm=0;
+    geshi=false;
+    sldDiameter.setMaximum(100);
+    sldDiameter.setValue(0);
+    sj1.setText(null);
+    sj2.setText(null);
+    if (jl.getSelectedIndex() >= 0)
+      soumd1.stop();
+
+   }
+  });
+
+  tjian.addActionListener(new ActionListener() {
+   public void actionPerformed(ActionEvent event) {
+    JFileChooser fileChooser = new JFileChooser(); 
+    fileChooser
+      .setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); 
+    fileChooser.setCurrentDirectory(new File("")); 
+    fileChooser
+      .setFileFilter(new javax.swing.filechooser.FileFilter() {// 设置当前文件过滤器
+       public boolean accept(File file) {
+        String name = file.getName().toLowerCase();
+        return name.endsWith(".mp3")
+          || file.isDirectory();//测试此抽象路径名表示的文件是否是一个目录..当且仅当此抽象路径名表示的文件存在且 是一个目录时，返回 true
+       }
+       public String getDescription() { 
+        return "音乐文件(*.mp3)";
+       }
+      });
+    if (fileChooser.showOpenDialog(ceshi3.this) == JFileChooser.APPROVE_OPTION) {
+     String fileName = fileChooser.getSelectedFile()
+       .getAbsolutePath();
+     vector.add(fileName);
+     StringBuffer buffer = mingzi(fileName);
+     mingcheng.add(buffer);
+    }
+   }
+  });
+
+  shanc.addActionListener(new ActionListener() {
+   public void actionPerformed(ActionEvent event) {
+    if (jl.getSelectedIndex() >= 0) {
+     mingcheng.removeElementAt(jl.getSelectedIndex());
+     vector.removeElementAt(jl.getSelectedIndex());
+     jl.setListData(mingcheng);//播放列表已改变，此处当于刷新
+    }
+   }
+  });
+
+  jl.addMouseListener(new MouseAdapter() {
+   public void mousePressed(MouseEvent event) {//指示组件中发生鼠标动作的事件
+    if (event.getClickCount() == 2) {
+     if (jl.getSelectedIndex() >= 0) {
+      String yy = (String) vector.get(jl.getSelectedIndex());
+      File ff = new File(yy);
+      if (ff.exists()) {
+       if (yy.matches("[\\S\\s]*.mp3")|| yy.matches("[\\S\\s]*.MP3")) {
+        if (soumd1 != null) {
+         a = 0;
+         b = 0;
+         you = 0;
+         soumd1.stop();
+        }
+           soumd1.setMediaLocation("file:/" + yy);
+        fo = true;
+        soumd1.start();
+        geshi=true;
+        try {
+         Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+        zongmiao=(int)soumd1.getDuration().getSeconds();
+        if(zongmiao>10000)
+        {
+         try {
+          Thread.sleep(500);
+         } catch (InterruptedException e) {
+         }
+        zongmiao=(int)soumd1.getDuration().getSeconds();
+        }
+        String aa=fen(zongmiao);
+           sj2.setText(aa);
+       } else
+        JOptionPane.showMessageDialog(null,
+          "播放文件格式的有错,无法播放 建议删除");
+      } else
+       JOptionPane.showMessageDialog(null,
+         "此歌曲文件已经不存在,建议删除");
+
+     }
+    }
+   }
+  });
+  setSize(300, 400);//调整组件的大小，使其宽度为 width，高度为 height
+  setVisible(true);//根据参数 b 的值显示或隐藏此组件
+}
+
+public void run() {
+  while (true) {
+   Date now = new Date();
+   shijian.setText("当前时间: " + now.toString());
+   try {
+    Thread.sleep(1000);
+   } catch (InterruptedException e) {
+   }
+   if(geshi){
+   you=(int)soumd1.getMediaTime().getSeconds();
+    mm =you%60;
+    b=you/60;
+     sj1.setText(b+":"+mm);
+   sldDiameter.setMaximum(zongmiao);
+   if(you!=zongmiao)
+     sldDiameter.setValue(you);
+   else {
+     sldDiameter.setValue(0);
+    mm=0;
+       b=0;
+   }
+    }
+  }
+}
+
+public StringBuffer mingzi(String fileName) {
+  String mc = "";
+  for (int i = fileName.length(); i >= 1; i--) {
+   if (fileName.charAt(i - 1) == '\\')
+    break;
+   mc += fileName.charAt(i - 1);
+  }
+  StringBuffer buffer = new StringBuffer(mc);
+  StringBuffer mm = buffer.reverse();
+  return mm;
+}
+
+public void mmm(Vector vector, Vector mingcheng, String xinxi) {
+  xinxi a = new xinxi(vector, mingcheng);
+  try {
+   ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(xinxi));//创建一个向具有指定名称的文件中写入数据的输出文件流..ObjectOutputStream 将 Java 对象的基本数据类型和图形写入 OutputStream
+   output.writeObject(a);//writeObject 方法用于将对象写入流中
+   output.flush();
+   output.close();
+  } catch (Exception e) {
+
+  }
+}
+public String fen(int yy) {
+   fenzhong = (int) yy / 60;
+   miaozhong = (int) yy % 60;
+   String sss = fenzhong + ":" + miaozhong;
+   return sss;
+}
+
+public static void main(String agrs[]) {
+  ceshi3 s = new ceshi3();
+  Thread t1 = new Thread(s);
+  t1.start();
+  s.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//设置用户在此窗体上发起 "close" 时默认执行的操作..使用 System exit 方法退出应用程序
+}
+
+
+}
+
+class xinxi implements Serializable {
+
+Vector a = new Vector();
+
+Vector b = new Vector();
+
+public xinxi(Vector vector, Vector mingcheng) {
+  a = vector;
+  b = mingcheng;
+}
+
+}

@@ -1,0 +1,71 @@
+import java.io.*; 
+import java.net.*; 
+import java.util.regex.*;
+
+
+public class sinahot { 
+
+	/** 
+	 * @param args 
+	 */ 
+	public static void main(String[] args) { 
+		// TODO Auto-generated method stub 
+		
+	       String strUrl = "http://weibo.com/";         
+	   try { 
+		   
+		   
+		   File   file=new   File( "hots.txt"); 
+           BufferedWriter   out=new   BufferedWriter( 
+                new   FileWriter(file,true)); 
+           
+		   boolean kaishi = false;
+		   boolean jieshu = false;
+		   Pattern p = Pattern.compile("<.+?>");
+		   Pattern p2 = Pattern.compile(".*正在热议：.*");
+		   Pattern p3 = Pattern.compile(".*这些人正在用微博.*");
+	              URL url = new URL(strUrl);                              
+	InputStreamReader isr = new InputStreamReader(url.openStream(),"utf-8"); 
+
+	              BufferedReader br = new BufferedReader(isr); 
+	             String str = null;
+	     while ((str = br.readLine() )!= null) {   
+	    	 
+	    	 Matcher m = p.matcher(str);
+				 if (m.find()) {
+				String string = m.replaceAll("");
+				Matcher m2 = p2.matcher(string);
+				if(m2.find())
+				{
+					kaishi = true;
+				}
+				if(kaishi)
+				{
+				 System.out.println(string);
+				 out.write(string);
+				 out.newLine();
+				
+				}
+				Matcher m3 = p3.matcher(string);
+				if(m3.find())
+				{
+					jieshu = true;
+				}
+				if(jieshu)
+				{
+					break;
+				}
+				}
+				}            
+	    br.close();   
+	    out.close(); 
+        out=null; 
+        file=null; 
+	 } catch (IOException e) 
+	 {            
+	        e.printStackTrace();    
+	      }    
+	  } 
+		 
+	} 
+

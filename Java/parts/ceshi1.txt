@@ -1,0 +1,58 @@
+import java.io.*; 
+import java.net.*; 
+import java.util.Timer;
+import java.util.regex.*;
+
+
+
+
+public class ceshi { 
+
+	Timer a = new Timer();
+	/** 
+	 * @param args 
+	 */ 
+	public static void main(String[] args) { 
+		// TODO Auto-generated method stub 
+		
+		  String strUrl = "http://box.zhangmen.baidu.com/x?op=12&count=1&title=¥Û‘º‘⁄∂¨ºæ$$∆Î«ÿ$$$$";  
+        
+		   try { 
+
+			   Pattern p = Pattern.compile("<.+?>");
+		              URL url = new URL(strUrl);                              
+		InputStreamReader isr = new InputStreamReader(url.openStream(),"gbk");
+
+		
+		              BufferedReader br = new BufferedReader(isr); 
+		              
+		             String str = null;
+		             StringBuffer a =new StringBuffer();
+		             
+		           
+		     while ((str = br.readLine() )!= null) {   
+
+		    	System.out.println(str);
+		    	 
+		    	 Matcher m = p.matcher(str);
+					if(m.find())
+					{
+					String resul = m.replaceAll("");	
+					System.out.println(resul);
+					}
+
+		     }
+		     
+	          
+					br.close();
+
+	        }
+					 catch (IOException e) 
+	      {            
+	        e.printStackTrace();    
+	      }    
+	  } 
+}
+
+
+

@@ -1,0 +1,92 @@
+import java.io.*;
+import java.net.*;
+public class shiyan2
+{
+   	public static void getsong(String _path,String _savepath)
+   	{
+   		String savePath = _savepath;
+   		String path = _path;
+   		int BYTE_SIZE = 1;
+   		int SAVE_SIZE = 1024;
+   		byte []buff = new byte[BYTE_SIZE];
+   		byte []save = new byte[SAVE_SIZE];
+   		BufferedInputStream bf = null;
+   		FileOutputStream file;
+   		URL url = null;
+   		HttpURLConnection httpUrl;
+   		try{
+   			url = new URL(path);
+   			httpUrl = (HttpURLConnection)url.openConnection();
+   			System.out.println("已经打开链接诶。。。。。");
+   		    bf = new BufferedInputStream(httpUrl.getInputStream());
+   		    System.out.println("已经获取资源。。。");
+   		    file = new FileOutputStream(savePath);
+   		    System.out.println("准备保存到："+savePath);
+   		    System.out.println("开始读入。。。。");
+   			int i = 0;
+   			while(bf.read(buff)!=-1)
+   			{
+   				save[i]=buff[0];
+   				if(i==SAVE_SIZE-1){
+   					file.write(save,0,SAVE_SIZE);
+   					save = new byte[SAVE_SIZE];
+   					i=0;  					
+   				}
+   				else{
+   				    i++; 
+   				}
+   				
+   			}
+   			       if(i>0){
+   			             file.write(save,0,i-1);  				         
+   			     }
+   			
+   			    System.out.println("恭喜蒋欣呈，下载成功！！！");
+   			    httpUrl.disconnect();
+   			    bf.close();
+   			    file.close();   			    
+   		}
+   		catch(MalformedURLException e){
+   		        e.printStackTrace();  	
+   		}
+   		catch(IOException e){
+		        e.printStackTrace();  	
+		}
+   	}
+   	
+   	public static void main(String []args)
+   	{
+   		shiyan2.getsong("http://bawo.free.fr/MCs/02%20-%20Mariah%20Carey%20-%20We%20Belong%20Together.mp3","G://shiyan(substation_of_NCC)/song.mp3");
+   	}
+   		
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

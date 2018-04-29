@@ -1,0 +1,48 @@
+import java.awt.*;
+import java.awt.event.*;
+
+public class shiyan2 extends Frame {
+ Button b = new Button("²é");
+ Label l1 = new Label("English");
+ Label l2 = new Label("Chinese:");
+ double heigth, weigth;
+ double x, y;
+ TextField tf1 = new TextField(null, 10);
+ TextField tf2 = new TextField(null, 10);
+
+ public shiyan2() {
+  super("Translation:");
+  setLayout(new FlowLayout(FlowLayout.LEFT));
+  add(l1);
+  add(tf1);
+  add(l2);
+  add(tf2);
+  add(b);
+  pack();
+  setVisible(true);
+  addWindowListener(new WindowAdapter() {
+   public void windowClosing(WindowEvent e) {
+    System.exit(0);
+   }
+  });
+  b.addActionListener(new ButtonListener());
+ } 
+
+ class ButtonListener implements ActionListener {
+  public void actionPerformed(ActionEvent e) {
+   if (tf1.getText() != null) {
+    if (tf1.getText().contains("boy") == true)
+     tf2.setText("ÄÐº¢");
+    else if (tf1.getText().contains("girl") == true)
+     tf2.setText("Å®º¢");
+    else  {
+     tf2.setText("");
+    }
+   } 
+  }
+ }
+
+ public static void main(String[] args) {
+  new shiyan2();
+ }
+}

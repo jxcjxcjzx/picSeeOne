@@ -1,0 +1,134 @@
+import java.io.BufferedInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
+public class shiyan {
+ private static String baseURL="http://www.songtaste.com";
+ private static String loginURL=baseURL+"/signin.php";
+ private static String actionURL=baseURL+"/info_oper.php?tag=signin&pageref=";
+ private static String musicURL=baseURL+"/music/";
+ private static CookieManager cm;
+ static{
+  cm=new CookieManager();
+  cm.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+  CookieHandler.setDefault(cm);
+ }
+ public static void main(String[] args) throws Exception{
+//  HttpURLConnection.setFollowRedirects(true);
+  login("abcmusic","000000");
+  listContents();
+ }
+ 
+ private static void listContents() throws Exception {
+  byte[] dat=new HttpGet(musicURL).data;
+  String src=new  String(dat,"gbk");
+  Matcher m=Pattern.compile("MSL\\(.*?\\)").matcher(src);
+  while(m.find())
+   System.out.println(m.group());
+ }
+
+ private static void login(String name,String pwd){
+  byte[] dat=new HttpGet(loginURL).data;
+  String src=new String(dat);
+  Matcher m=Pattern.compile("name=mpc.*?>").matcher(src);
+  String mpc="";
+  if(m.find()){
+   mpc=m.group();
+//   System.out.println(mpc);
+   mpc=mpc.substring(15,mpc.length()-1);
+//   System.out.println(mpc);
+  }
+  //do login
+  new HttpPost(actionURL,String.format("name=%s&pwd=%s&B12=Login&mpc=%s",name,pwd,mpc));
+ }
+
+ 
+ private static class HttpGet extends Thread{
+  private static final int bufferSize=1024;
+  private String ustr;
+  private byte[] data;
+  
+  private HttpGet(String u,String...ref){
+   ustr=u;
+   start();
+   try {join();} catch (Exception e) {}
+  }
+  
+  public void run(){
+   try{
+    URL u = new URL(ustr);
+    HttpURLConnection uc=(HttpURLConnection)u.openConnection();
+    byte[] b={};
+    byte[] t=new byte[bufferSize];
+    int r;
+    BufferedInputStream bin=new BufferedInputStream(uc.getInputStream());
+    while((r=bin.read(t))>-1){
+     b=putData(b,t,r);
+    }
+    bin.close();
+    uc.disconnect();
+    data=b;
+   }catch(Exception e){}
+  }
+  
+  private final byte[] putData(byte[] b, byte[] t, int r) {
+   byte[] tb=new byte[b.length+r];
+   System.arraycopy(b, 0, tb, 0, b.length);
+   System.arraycopy(t, 0, tb, b.length, r);
+   return tb;
+  }
+ }
+
+ private static class HttpPost extends Thread{
+  private static int blen=1024;
+  private static String contentType="application/x-www-form-urlencoded";
+  private String url,pms;
+  private byte[] dat={};
+  private HttpPost(String u,String p){
+   url=u;
+   pms=p;
+   start();
+   try{join();}catch(Exception e){}
+  }
+  public void run(){
+   try{
+    URL u = new URL(url);
+    HttpURLConnection connection=(HttpURLConnection)u.openConnection();
+    connection.setRequestMethod("POST");
+    connection.setRequestProperty("Content-Type",contentType);
+    connection.setRequestProperty("Content-Length",String.valueOf(pms.length()));
+    connection.setUseCaches(false);
+    connection.setDoOutput(true);
+    connection.setDoInput(true);
+    DataOutputStream dout=new DataOutputStream(connection.getOutputStream());
+    dout.write(pms.getBytes());
+    dout.flush();
+    dout.close();
+    InputStream in=connection.getInputStream();
+    BufferedInputStream bin=new BufferedInputStream(in);
+    byte[] buff=new byte[blen],bs={};
+    int r;
+    while((r=bin.read(buff))>-1){
+     bs=putData(bs,buff,r);
+    }
+    bin.close();
+    connection.disconnect();
+    dat=bs;
+   }catch(Exception e){}
+  }
+  private final byte[] putData(byte[] b, byte[] t, int r) {
+   byte[] tb=new byte[b.length+r];
+   System.arraycopy(b, 0, tb, 0, b.length);
+   System.arraycopy(t, 0, tb, b.length, r);
+   return tb;
+  }
+ }
+}

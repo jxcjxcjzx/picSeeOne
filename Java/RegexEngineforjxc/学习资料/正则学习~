@@ -1,0 +1,279 @@
+大家来找错-自己写个正则引擎(二)-构建抽象模式树
+上一帖已经说过了大概的设计，第一步我们是要把输入的正则式构建成抽象模式树，我们先定义表示模式树的类。
+public enum Releation
+{
+    Default,
+    Or,
+    And
+}
+public class PatternNode {
+    public PatternNode() 
+        :this(null)
+    {
+    }
+    public PatternNode(string text) {
+        Text = text;
+        Nodes = new List<PatternNode>();
+        OneOrMore = false;
+        Releation = Releation.Default;
+    }
+    public List<PatternNode> Nodes { get; set; }
+    public string Text { get; set; }
+    public bool OneOrMore { get; set; }
+    public Releation Releation{get;set;}
+}
+基本不用解释，属于一个仅用于封装数据的类，大家可以针对命名和代码布局风格挑一些刺儿。难点在于根据正则式解析成模式树，我是这样做的：按理说这种复杂逻辑的实现，应该先写伪代码，在脑子里演练一番算法，然后再写真正的目标代码，可我之前写的伪代码没保留下来，就说说思路吧，代码如下：
+public static PatternNode Parse(string input) {
+    PatternNode resultNode = new PatternNode(input);
+    int index = 0;
+    int leftParenthesisCount = 0;
+    List<string> childNodeStr = new List<string>();
+    StringBuilder currentScanStr = new StringBuilder();
+    while (index < input.Length) {
+        char currentChar = input[index];
+        switch (currentChar) {
+            case '|':
+                if (leftParenthesisCount == 0) {
+                    if (currentScanStr.Length > 0) {
+                        childNodeStr.Add(currentScanStr.ToString());
+                        currentScanStr.Remove(0, currentScanStr.Length);
+                    }
+                }
+                else {
+                    currentScanStr.Append(currentChar);
+                }
+                break;
+            case '(':
+                leftParenthesisCount++;
+                currentScanStr.Append(currentChar);
+                break;
+            case ')':
+                leftParenthesisCount--;
+                currentScanStr.Append(currentChar);
+                if (index + 1 < input.Length && input[index + 1] == '*') {
+                    currentScanStr.Append('*');
+                    index++;
+                }
+                break;
+            default:
+                currentScanStr.Append(currentChar);
+                break;
+        }
+        index++;
+    }
+    if (leftParenthesisCount != 0) {
+        throw new ApplicationException("括号不匹配");
+    }
+    if (currentScanStr.Length > 0) {
+        childNodeStr.Add(currentScanStr.ToString());
+        currentScanStr.Remove(0, currentScanStr.Length);
+    }
+    if (childNodeStr.Count > 1) { //本级有or关系，如“a|b”
+        childNodeStr.ForEach((str) => resultNode.Nodes.Add(new PatternNode(str)));
+        resultNode.Releation = Releation.Or;
+        resultNode.Nodes.ForEach((pattNode) =>
+            ProcessAndReleation(pattNode));
+    }
+    else {
+        ProcessAndReleation(resultNode);
+    }
+    return resultNode;
+}
+要解析输入的正则式肯定要从头向后便利输入的字符串，由于遍历的逻辑比较复杂，所以打算用while循环，比较灵活，声明变量index用来控制循环，while的条件是index < input.Length
+考虑到小括号的影响，循环外要用一个变量leftParenthesisCount来对左括号进行计数，以检测出括号少括或者多括的错误正则式。
+用一个StringBuild变量currentScanStr来存储遍历过程中的子模式，我们叫它字模式缓冲区
+循环过程中主要是处理"|","(",")"这3个字符，在遇到|的时候，如果左括号的个数为0，并且子模式缓冲区有数据，就把当前子模式添加到子节点中。如果左括号计数大于0，那就把当前字符放到子模式缓冲区里，下一次递归解析会处理它，本次处理只处理本层的模式。
+遇到(只要增加左括号计数并更新子模式缓冲区就行，但遇到)除了递减左括号计数器外，还需要考虑括号外有闭包的情况，把*也加到子模式缓冲区里。
+每一个层次的解析循环完了后要检查左括号是否为0，如果不为0，说明少些了有括号，直接跑错。如果循环完了子模式缓冲区里还有数据，也要添加到子节点里。
+遍历结束后，如果如果子节点数量大于1，那就说明本层的解析有或关系，就把本级节点的关系设置为or。可以看到循环的逻辑里是在遇到|的时候添加子节点的。
+上面这个方法基本上是只处理或的关系，可以看到上面的函数里在没有扫描出或子节点时调用了ProcessAndReleation，该方法去尝试解析连接子节点，如下
+private static void ProcessAndReleation(PatternNode pattNode) {
+    int index = 0;
+    string input = pattNode.Text;
+    StringBuilder currentScanStr = new StringBuilder();
+    int leftParenthesisCount = 0;
+    List<string> childNodeStr = new List<string>();
+    while (index < input.Length) {
+        char currentChar = input[index];
+        switch (currentChar) {
+            case '(':                        
+                //abc(de(fg))取出abc
+                if (leftParenthesisCount == 0 && currentScanStr.Length > 0) {
+                    childNodeStr.Add(currentScanStr.ToString());
+                    currentScanStr.Remove(0, currentScanStr.Length);
+                } 
+                leftParenthesisCount++;
+                currentScanStr.Append(currentChar);
+                break;
+            case ')':
+                leftParenthesisCount--;
+                currentScanStr.Append(currentChar);
+                if (index + 1 < input.Length && input[index + 1] == '*') {
+                    currentScanStr.Append('*');
+                    index++;
+                }
+                //只有最顶层的括号闭合才取出来abc(de(fg))只取(de(fg)),不取(fg)
+                if (leftParenthesisCount == 0 && currentScanStr.Length > 0) {
+                    childNodeStr.Add(currentScanStr.ToString());
+                    currentScanStr.Remove(0, currentScanStr.Length);
+                }
+                break;
+            default:
+                currentScanStr.Append(currentChar);
+                break;
+        }
+        index++;
+    }
+    if (leftParenthesisCount != 0) {
+        throw new ApplicationException("括号不匹配");
+    }
+    if (currentScanStr.Length > 0) {
+        childNodeStr.Add(currentScanStr.ToString());
+        currentScanStr.Remove(0, currentScanStr.Length);
+    }
+    if (childNodeStr.Count > 1) {//本层有and关系，如"a(b|c)d"会分成a,(b|c),d
+        pattNode.Releation = Releation.And;
+        childNodeStr.ForEach((str) => pattNode.Nodes.Add(new PatternNode(str)));
+        pattNode.Nodes.ForEach(
+        (node) => {
+            if (node.Text.Contains('(')) {//子节点下可能还有or或者and关系，如"(b|c)"
+                var orNode = Parse(node.Text);
+                node.Nodes = orNode.Nodes;
+                node.Releation = orNode.Releation;
+                node.OneOrMore = node.Text.EndsWith("*");
+            }
+            else {//子节点是纯字符串，如"a"
+                //结束递归
+            }
+        });
+    }
+    else {
+        if (childNodeStr[0] == pattNode.Text) {//本层没有and关系，如"(b|c)","cd"
+            if (pattNode.Text.IndexOf('(') == 0) {//(ab)或者(a|b)，最外层有括号
+                int toRemove = pattNode.Text.Length - 2;
+                if (pattNode.Text.EndsWith("*")) 
+                {
+                    toRemove--;
+                }
+                string qukuohao = pattNode.Text.Substring(1, toRemove);
+                var qukuohaoNode = Parse(qukuohao);
+                pattNode.Nodes = qukuohaoNode.Nodes ;
+                pattNode.Releation = qukuohaoNode.Releation;
+                pattNode.OneOrMore = pattNode.Text.EndsWith("*");
+            }
+            else //如"abc"
+            {
+                //结束递归
+            }
+        }
+        else {
+            //按理说不可能
+            System.Diagnostics.Debugger.Break();
+        }
+    }
+}
+说实在的，这个函数折腾时间最长，基本思路和处理或子节点类似，也是一个大循环，只不过处理的情况更复杂
+遇到(时如果左括号为0，并且子模式缓冲区有数据，应该先把缓冲区添加到子节点，然后再把当前的字符放入缓冲区，比如abc(de(fg))取出abc
+遇到)时同样要处理括号外有*的情况，但本层之处理本层的模式，所以要确保只有最顶层的括号闭合才取出来abc(de(fg))只取(de(fg)),不取(fg)。
+循环结束后如果有子节点，说明本层有and关系，因为本函数是通过()来进行本层的分割，也就是只解析连接子节点，如果子节点里面如果有括号的话，肯定还有and和or的关系，所以要遍历子节点，递归调用Parse来解析本层的子模式。
+如何本函数没有解析出and子节点，那说明本层要解析的模式字符串的最外层是括号括住的，要把最外层的括号去掉，然后递归调用Parse方法。
+我们来测试一下，给定一个输入，把解析出来的模式树用treeview来表示。
+private void showParseNode(PatternNode pattNode, TreeNodeCollection coll) {
+    if (pattNode.Nodes.Count == 0) {
+        coll.Add(pattNode.Text);
+        return;
+    }
+    for (int i = 0; i < pattNode.Nodes.Count; i++) {
+        PatternNode node = pattNode.Nodes[i];
+        TreeNode treeNode = new TreeNode(node.Text + ":"+node.Releation.ToString()
+            +":"+node.OneOrMore);
+        coll.Add(treeNode);
+        if (node.Nodes.Count != 0)
+            showParseNode(node,treeNode.Nodes);
+    }
+}
+截图如下，可以验证下这两个方法的执行结果是否正确，treeview的每个节点的表示是”模式字符串:子节点间关系:是否匹配多次”
+
+这两个函数共同组成一个递归的调用，而且每个函数里的if else，while都不算少，而且while里还有break，我可以很肯定的预测，尽管这段代码我连写带调试费了好长时间，但这段代码里肯定有低级错误，或者有更清晰简单的写法，请大家来指教一下，或者自己完全重新写一个更优雅的。
+
+
+
+
+大家来找错-自己写个正则引擎(三)-构建正则解析树及分词
+　　第一节介绍过RegexNode类，它的SplitWords用来分词，大致逻辑就是遍历要分词的字符串，不断的调用自身的Parse属性指向的委托，Parse属性指向一个bool ParseFunc(string input, int index, out string output)类型的委托，其中input表示要解析的字符串，index表示其实的解析位置，返回值表示否则匹配成功，output表示匹配成功是匹配到的字符串。如果本次匹配没有匹配到输出，就把当前字符当成一个独立的匹配结果，然后扫描指针向后移动，继续遍历扫描解析。
+　　具体代码灰常简单，如下。
+public delegate bool ParseFunc(string input, int index, out string output);
+public class RegexNode {
+    public RegexNode() {
+        Nodes = new List<RegexNode>();
+    }
+    public RegexNode(ParseFunc func) {
+        Parse = func;
+        Nodes = new List<RegexNode>();
+    }
+    public List<RegexNode> Nodes { get; set; }
+    public ParseFunc Parse { get; set; }
+    public Releation Releation { get; set; }
+    public string Text { get; set; }
+    public string[] SplitWords(string input) {
+        List<string> result = new List<string>();
+        int index = 0;
+        while (index < input.Length) {
+            string output = null;
+            if(Parse(input, index, out output))
+            {
+                index += output.Length;
+                result.Add(output);
+            }
+            else
+            {
+                if (index < input.Length) {
+                    result.Add(input.Substring(index, 1));
+                }
+                index ++;
+            }
+        }
+        return result.ToArray();
+    }
+}
+　　其实把抽象模式树转换成正则解析树的代码也很简单，因为都是树与数的转换，用一个简单的递归调用对源树进行深度优先遍历就行了，遍历的过程中根据模式树中提供的信息，调用解析方法工厂ParseFuncFactory的相关方法得到该子模式的解析函数，并赋值给目标树节点的Parse属性。代码中要考虑当前节点没有子节点的情况，如果是匹配一个或多个就用OneOrMoreMaxMatch，否则用MaxMatch，如果有子节点，要考察当前节点的Releation，然后进一步确定调用ParseFuncFactory的哪个方法，代码很短，如下。
+public static RegexNode GetParseNode(PatternNode rootPatt) {
+    RegexNode root = new RegexNode();
+    root.Releation = rootPatt.Releation;
+    root.Text = rootPatt.Text;
+    if (rootPatt.Nodes.Count == 0) {
+        if (rootPatt.OneOrMore) {
+            string toMatch = rootPatt.Text.TrimEnd(new[]{'*',')'});
+            toMatch = toMatch.TrimStart('(');
+            root.Parse = ParseFuncFactory.OneOrMoreMaxMatch(toMatch);
+        }
+        else {
+            root.Parse = ParseFuncFactory.MaxMatch(rootPatt.Text);
+        }
+        return root;
+    }
+    foreach (var pt in rootPatt.Nodes) {
+        var node = GetParseNode(pt);
+        root.Nodes.Add(node);
+    }
+    if (rootPatt.Releation == Releation.And) 
+    {
+        if (rootPatt.OneOrMore) {
+            root.Parse = ParseFuncFactory.MatchOneOrMoreWithAnd(root.Nodes);
+        }
+        else {
+            root.Parse = ParseFuncFactory.MatchAnd(root.Nodes);
+        }
+    }
+    else if (rootPatt.Releation == Releation.Or) {
+        if (rootPatt.OneOrMore) {
+            root.Parse = ParseFuncFactory.MatchOneOrMoreWithOr(root.Nodes);
+        }
+        else {
+            root.Parse = ParseFuncFactory.MatchOr(root.Nodes);
+        }
+    }
+    return root;
+}
+这部分代码比较简洁，比我预想的还简单，可见高阶函数的应用确实能使某些问题的解决变得简单，应该抽空仔细看看SICP了。这部分代码应该可挑剔的地方不多吧，大家也再找找。
+

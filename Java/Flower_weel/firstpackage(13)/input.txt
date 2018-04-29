@@ -1,0 +1,35 @@
+setway utf-8
+http://site.douban.com/fblifee/
+forward
+setway utf-8
+http://music.douban.com/artists/
+forward
+setway utf-8
+http://www.sjtu.edu.cn/zdh/kxyj.htm
+forward
+setway utf-8
+http://xxgk.sjtu.edu.cn/xxgg/
+forward
+setway utf-8
+http://news.tsinghua.edu.cn/publish/news/4209/index.html
+forward
+setway utf-8
+http://news.fudan.edu.cn/news/xysh/
+forward
+setway gbk
+http://www.zdxb.zju.edu.cn
+forward
+setway utf-8
+http://news.ustc.edu.cn/xwbl/
+forward
+setway utf-8
+http://job.univs.cn/chuangye/cyzxzx/
+forward
+setway utf-8
+http://news.univs.cn/gxkx/
+forward
+setway utf-8
+http://v.163.com/special/tedspeeches/
+forward
+setway utf-8
+http://book.douban.com/

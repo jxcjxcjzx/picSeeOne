@@ -1,0 +1,67 @@
+import java.awt.Color;
+import java.awt.GridLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+public class shiyan extends JFrame {
+	
+	int r, g, b;
+
+	public shiyan() {
+		
+		final JTextField txtColor = new JTextField();
+		txtColor.setBackground(new Color(128, 128, 128));
+		final JTextField txtRed = new JTextField();
+		final JSlider red = new JSlider(JSlider.HORIZONTAL, 0, 255, 128);
+		txtRed.setText("128");
+		red.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				r = red.getValue();
+				txtRed.setText(String.valueOf(r));
+				txtColor.setBackground(new Color(r, g, b));
+			}
+		});
+		
+		final JTextField txtGreen = new JTextField();
+		final JSlider green = new JSlider(JSlider.HORIZONTAL, 0, 255, 128);
+		txtGreen.setText("128");
+		green.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				g = green.getValue();
+				txtGreen.setText(String.valueOf(g));
+				txtColor.setBackground(new Color(r, g, b));
+			}
+		});
+		
+		final JTextField txtBlue = new JTextField();
+		final JSlider blue = new JSlider(JSlider.HORIZONTAL, 0, 255, 128);
+		txtBlue.setText("128");
+		blue.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				g = blue.getValue();
+				txtBlue.setText(String.valueOf(g));
+				txtColor.setBackground(new Color(r, g, b));
+			}
+		});
+		
+		getContentPane().setLayout(new GridLayout(4, 2));
+		getContentPane().add(red);
+		getContentPane().add(txtRed);
+		getContentPane().add(green);
+		getContentPane().add(txtGreen);
+		getContentPane().add(blue);
+		getContentPane().add(txtBlue);
+		getContentPane().add(txtColor);
+		pack();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		new shiyan();
+	}
+} 

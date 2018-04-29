@@ -1,0 +1,195 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Panel;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.File;
+
+import javax.media.Buffer;
+import javax.media.CannotRealizeException;
+import javax.media.CaptureDeviceInfo;
+import javax.media.CaptureDeviceManager;
+import javax.media.Manager;
+import javax.media.MediaLocator;
+import javax.media.NoPlayerException;
+import javax.media.Player;
+import javax.media.control.FrameGrabbingControl;
+import javax.media.format.VideoFormat;
+import javax.media.util.BufferToImage;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+import com.sun.image.codec.jpeg.ImageFormatException;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
+
+public class ceshi3 extends JPanel implements ActionListener{
+
+ private CaptureDeviceInfo captureDeviceInfo=null;
+ private MediaLocator mediaLocator=null;
+ private static Player player=null;
+ private ImagePanel imagePanel=null;
+ private JButton jbok,jbcancel;
+ private Buffer buffer=null;
+ private VideoFormat videoFormat=null;
+ private BufferToImage bufferToImage=null;
+ private Image image=null;
+ private JPanel jp=new JPanel();
+ 
+ public ceshi3()
+ {
+  //setLayout(new BorderLayout());
+  this.setLayout(null);
+  setSize(300,500);
+  String str="vfw:Microsoft WDM Image Capture (Win32):0";
+  captureDeviceInfo=CaptureDeviceManager.getDevice(str);
+  mediaLocator=new MediaLocator("vfw://0");
+  imagePanel=new ImagePanel();
+  jbok=new JButton("ÅÄ   ÕÕ");
+  jbcancel=new JButton("ÖØ   ÅÄ");
+  jbok.addActionListener(this);
+  jbcancel.addActionListener(this);
+  
+  try {
+   player=Manager.createRealizedPlayer(mediaLocator);
+   player.start();
+   Component comp;
+   if((comp=player.getVisualComponent())!=null)
+   comp.setBounds(0, 0, 240, 180);
+   this.add(comp);
+  } catch (NoPlayerException e)
+  {
+   e.printStackTrace();
+  } catch (CannotRealizeException e)
+  {
+   e.printStackTrace();
+  } catch (IOException e)
+  {
+   e.printStackTrace();
+  }  
+  jp.add(jbok);
+  jp.add(jbcancel);
+  jp.add(imagePanel);
+  jp.setBounds(0, 180, 240, 200);
+  this.add(jp);
+
+ }
+
+ public void print(Graphics g)
+ {
+  super.print(g);
+  g.setColor(new Color(255,0,0));
+  g.drawLine(0, 0, 100, 100);
+ }
+ public void actionPerformed(ActionEvent e)
+ {
+  if(e.getSource()==jbok)
+  {
+   FrameGrabbingControl fgc=(FrameGrabbingControl)player.getControl("javax.media.control.FrameGrabbingControl");
+   buffer=fgc.grabFrame();
+   bufferToImage=new BufferToImage((VideoFormat)buffer.getFormat());
+   image=bufferToImage.createImage(buffer);
+   imagePanel.setImage(image);
+   saveImage(image,"temp.jpg");
+  }
+  if(e.getSource()==jbcancel)
+  {
+   imagePanel.setImage(null);
+  }
+   
+ }
+
+ public static void saveImage(Image image,String path)
+ {
+   BufferedImage bi=new BufferedImage(image.getWidth(null),image.getHeight(null),BufferedImage.TYPE_INT_RGB);
+   Graphics2D g2 = bi.createGraphics();
+   g2.drawImage(image, null, null);
+   FileOutputStream fos=null;
+   
+   try {
+    fos=new FileOutputStream(path);
+
+   } catch (FileNotFoundException e)
+   {
+    e.printStackTrace();
+   }
+   JPEGImageEncoder je=JPEGCodec.createJPEGEncoder(fos);
+   JPEGEncodeParam jp=je.getDefaultJPEGEncodeParam(bi);
+   jp.setQuality(1f, false);
+   je.setJPEGEncodeParam(jp);
+   try {
+    je.encode(bi);
+    fos.close();
+   } catch (ImageFormatException e)
+   {
+    e.printStackTrace();
+   } catch (IOException e)
+   {
+    e.printStackTrace();
+   }
+
+ }
+ public static File getImage()
+ {
+  File f=new File("temp.jpg");
+  return f;
+  
+ }
+ 
+ class ImagePanel extends Panel
+ {
+   public Image myimg = null;
+
+   public ImagePanel()
+   {
+    setLayout(null);
+    setSize(240,180);
+   }
+
+   public void setImage(Image img)
+   {
+    this.myimg = img;
+    repaint();
+   }
+
+   public void paint(Graphics g)
+   {
+    if (myimg != null)
+    {
+     g.drawImage(myimg, 0, 0, this);
+    }
+
+   }
+ 
+ }
+ 
+ public static void main(String[] args)
+ {
+  JFrame f = new JFrame("FirstCapture");
+  ceshi3 cf = new ceshi3();
+
+  f.addWindowListener(new WindowAdapter() {
+   public void windowClosing(WindowEvent e) {
+    player.close();
+   System.exit(0);}});
+
+  f.add("Center",cf);
+  f.pack();
+  f.setBounds(100,100,240,550);
+  f.setVisible(true);
+ }
+ 
+}
