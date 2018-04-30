@@ -1,8 +1,6 @@
 #include "PicAppManager.h"
 void PicAppManager::AddAppName(QString name)
 {
-PicApp* app = new BasicLogicHandle();
-
 if(!AppNames.contains(name))
 AppNames.append(name);
 }

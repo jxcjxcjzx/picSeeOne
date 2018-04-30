@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QtGui>
 #include <qpicture.h>
+#include "PicSeeOneregex.h"
 #include <QLineEdit>
 #include <QFile>
 #include <QObject>
@@ -19,31 +20,11 @@
 #include <QListWidget>
 #include "SuggestProvider.h"
 #include "HisLogRecord.h"
-#include "PicSeeOneregex.h"
-
-// here the function is for the data read from the udp channel
-void PicSeeOne::readPendingDatagrams()
-{
-while(receiver->hasPendingDatagrams())
-{
-QByteArray datagram;
-datagram.resize(receiver->pendingDatagramSize());
-receiver->readDatagram(datagram.data(),datagram.size());
-medit->insert(QString(datagram.data()));
-medit->setFocus();
-medit->show();
-break;
-}
-
-}
 
 PicSeeOne::PicSeeOne()
 {
-//only a test , one line
-
 setWindowTitle("PicSeeOne");
 setWindowIcon(QIcon("PicSeeOne.jpg"));
-
 
 current_index_of_pic=0;
 query="qt";
@@ -59,15 +40,13 @@ BillBoard->setGeometry(700,570,300,22);
 
 // test area
 listWidget = new QListWidget(this);
-// add for the radio listening function
-receiver = new QUdpSocket(this);
-QHostAddress udpaddr;
-udpaddr.setAddress("192.168.43.133");
-receiver->bind(udpaddr,6665);// the bind socket port to 6665 by default
 // following are the ways to add items to listwidget
 //new QListWidgetItem(tr("hello"),listWidget);
+//new QListWidgetItem(tr("ni hao"),listWidget);
 listWidget->setGeometry(10,60,160,90) ;
-PicApp* app = new BasicLogicHandle();
+//QListView *listbox = new QListView(this);
+//listbox->setGeometry(10,60,360,30) ;
+//listbox->setRowHidden(1,true);
 
 QString mystring;
 medit->insert("qt");
@@ -75,7 +54,6 @@ connect(medit,SIGNAL(returnPressed()),this,SLOT(repaint()));
 connect(medit,SIGNAL(returnPressed()),this,SLOT(setFocus()));
 connect(medit,SIGNAL(returnPressed()),medit,SLOT(clear()));
 connect(medit,SIGNAL(returnPressed()),medit,SLOT(hide()));
-connect(receiver,SIGNAL(readyRead()),this,SLOT(readPendingDatagrams()));
 }
 
 PicSeeOne::~PicSeeOne()
